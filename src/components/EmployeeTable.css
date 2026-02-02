@@ -1,0 +1,115 @@
+.employee-table-container {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.table-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.search-input {
+    padding: 0.75rem 1rem;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    min-width: 300px;
+    transition: all var(--transition-normal);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--kellogg-red);
+    box-shadow: 0 0 0 3px rgba(228, 0, 43, 0.1);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.employee-table thead {
+    background: var(--surface-elevated);
+}
+
+.employee-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.employee-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color var(--transition-fast);
+}
+
+.employee-table th.sortable:hover {
+    color: var(--kellogg-red);
+}
+
+.employee-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.employee-table tbody tr {
+    transition: background var(--transition-fast);
+}
+
+.employee-table tbody tr:hover {
+    background: var(--surface-glass-hover);
+}
+
+.employee-name {
+    font-weight: 500;
+}
+
+.highlight {
+    color: var(--kellogg-red);
+    font-weight: 600;
+}
+
+.table-footer {
+    margin-top: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.chart-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+}

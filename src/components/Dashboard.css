@@ -1,0 +1,69 @@
+.dashboard {
+    animation: fadeIn 0.5s ease;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    background: linear-gradient(135deg, var(--kellogg-red), var(--kellogg-red-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dashboard-header p {
+    margin: 0.5rem 0 0 0;
+}
+
+.company-logo {
+    height: 50px;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-large {
+    grid-column: span 1;
+}
+
+.chart-small {
+    grid-column: span 1;
+}
+
+@media (max-width: 1200px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-large,
+    .chart-small {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .company-logo {
+        height: 40px;
+    }
+}
