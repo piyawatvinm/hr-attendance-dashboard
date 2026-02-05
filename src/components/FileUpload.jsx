@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './FileUpload.css';
 
-export default function FileUpload({ onFileProcessed }) {
+export default function FileUpload({ onFileProcessed, label, compact = false }) {
     const [isDragging, setIsDragging] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
@@ -56,6 +56,27 @@ export default function FileUpload({ onFileProcessed }) {
         }
     };
 
+    const inputId = `file-input-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Compact mode for inline upload
+    if (compact) {
+        return (
+            <div className="file-upload-compact">
+                <input
+                    type="file"
+                    accept=".xlsx,.xls"
+                    onChange={handleFileSelect}
+                    style={{ display: 'none' }}
+                    id={inputId}
+                />
+                <label htmlFor={inputId} className="btn btn-primary btn-sm">
+                    {isProcessing ? 'Processing...' : (label || 'Choose File')}
+                </label>
+                {error && <span className="error-text">{error}</span>}
+            </div>
+        );
+    }
+
     return (
         <div className="file-upload-container">
             <div
@@ -73,22 +94,22 @@ export default function FileUpload({ onFileProcessed }) {
                 ) : (
                     <div className="upload-content">
                         <div className="upload-icon">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                 <polyline points="17 8 12 3 7 8" />
                                 <line x1="12" y1="3" x2="12" y2="15" />
                             </svg>
                         </div>
-                        <h3>Upload Eagle System Report</h3>
-                        <p className="text-secondary">Drag and drop your Excel file here, or click to browse</p>
+                        <h3>{label || 'Upload Excel File'}</h3>
+                        <p className="text-secondary">Drag and drop or click to browse</p>
                         <input
                             type="file"
                             accept=".xlsx,.xls"
                             onChange={handleFileSelect}
                             style={{ display: 'none' }}
-                            id="file-input"
+                            id={inputId}
                         />
-                        <label htmlFor="file-input" className="btn btn-primary mt-3">
+                        <label htmlFor={inputId} className="btn btn-primary mt-2">
                             Choose File
                         </label>
                     </div>

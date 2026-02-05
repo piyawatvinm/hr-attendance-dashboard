@@ -19,7 +19,10 @@ export default function EmployeeTable({ employees }) {
     const filteredEmployees = employees.filter(emp =>
         emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         emp.id.includes(searchTerm) ||
-        emp.position.toLowerCase().includes(searchTerm.toLowerCase())
+        emp.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (emp.plantDivision && emp.plantDivision.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (emp.employeeType && emp.employeeType.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (emp.category && emp.category.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const sortedEmployees = [...filteredEmployees].sort((a, b) => {
@@ -41,6 +44,26 @@ export default function EmployeeTable({ employees }) {
             case 'totalOT':
                 aVal = a.totals.totalOT;
                 bVal = b.totals.totalOT;
+                break;
+            case 'leaveDays':
+                aVal = a.totals.leaveDays || 0;
+                bVal = b.totals.leaveDays || 0;
+                break;
+            case 'absentDays':
+                aVal = a.totals.absentDays || 0;
+                bVal = b.totals.absentDays || 0;
+                break;
+            case 'plantDivision':
+                aVal = a.plantDivision || '';
+                bVal = b.plantDivision || '';
+                break;
+            case 'employeeType':
+                aVal = a.employeeType || '';
+                bVal = b.employeeType || '';
+                break;
+            case 'category':
+                aVal = a.category || '';
+                bVal = b.category || '';
                 break;
             default:
                 aVal = a.totals.totalOT;
@@ -80,6 +103,15 @@ export default function EmployeeTable({ employees }) {
                             <th onClick={() => handleSort('position')} className="sortable">
                                 Position {sortField === 'position' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
+                            <th onClick={() => handleSort('plantDivision')} className="sortable">
+                                Plant/Division {sortField === 'plantDivision' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th onClick={() => handleSort('employeeType')} className="sortable">
+                                Employee Type {sortField === 'employeeType' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th onClick={() => handleSort('category')} className="sortable">
+                                Category {sortField === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
                             <th onClick={() => handleSort('totalHours')} className="sortable">
                                 Total Hours {sortField === 'totalHours' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
@@ -90,20 +122,31 @@ export default function EmployeeTable({ employees }) {
                             <th>OT 1.5x</th>
                             <th>OT 2x</th>
                             <th>OT 3x</th>
+                            <th onClick={() => handleSort('leaveDays')} className="sortable">
+                                Leave {sortField === 'leaveDays' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th onClick={() => handleSort('absentDays')} className="sortable">
+                                Absent {sortField === 'absentDays' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedEmployees.map((emp, index) => (
                             <tr key={emp.id} className="fade-in" style={{ animationDelay: `${index * 20}ms` }}>
                                 <td className="employee-name">{emp.name}</td>
-                                <td>{emp.id}</td>
-                                <td>{emp.position}</td>
+                                <td className="employee-id">{emp.id}</td>
+                                <td className="employee-position">{emp.position}</td>
+                                <td>{emp.plantDivision || '-'}</td>
+                                <td>{emp.employeeType || '-'}</td>
+                                <td>{emp.category || '-'}</td>
                                 <td>{formatHours(emp.totals.totalHours)}</td>
                                 <td className="highlight">{formatHours(emp.totals.totalOT)}</td>
                                 <td>{formatHours(emp.totals.ot1x)}</td>
                                 <td>{formatHours(emp.totals.ot1_5x)}</td>
                                 <td>{formatHours(emp.totals.ot2x)}</td>
                                 <td>{formatHours(emp.totals.ot3x)}</td>
+                                <td className={emp.totals.leaveDays > 0 ? 'highlight-warning' : ''}>{emp.totals.leaveDays || 0}</td>
+                                <td className={emp.totals.absentDays > 0 ? 'highlight-danger' : ''}>{emp.totals.absentDays || 0}</td>
                             </tr>
                         ))}
                     </tbody>

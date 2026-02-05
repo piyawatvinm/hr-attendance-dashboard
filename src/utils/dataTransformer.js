@@ -16,8 +16,8 @@ export function transformEmployeeData(employees) {
             ot3x: excelTimeToHours(record.ot3x)
         }));
 
-        // Calculate totals
-        const totals = transformedRecords.reduce((acc, record) => ({
+        // Calculate totals from transformed records
+        const calculatedTotals = transformedRecords.reduce((acc, record) => ({
             totalHours: acc.totalHours + record.totalHours,
             ot1x: acc.ot1x + record.ot1x,
             ot1_5x: acc.ot1_5x + record.ot1_5x,
@@ -32,7 +32,11 @@ export function transformEmployeeData(employees) {
         });
 
         // Calculate total OT
-        totals.totalOT = totals.ot1x + totals.ot1_5x + totals.ot2x + totals.ot3x;
+        calculatedTotals.totalOT = calculatedTotals.ot1x + calculatedTotals.ot1_5x + calculatedTotals.ot2x + calculatedTotals.ot3x;
+
+        // Preserve leaveDays and absentDays from original data
+        calculatedTotals.leaveDays = employee.totals.leaveDays || 0;
+        calculatedTotals.absentDays = employee.totals.absentDays || 0;
 
         return {
             id: employee.id,
@@ -40,7 +44,7 @@ export function transformEmployeeData(employees) {
             position: employee.position,
             department: employee.department,
             dailyRecords: transformedRecords,
-            totals
+            totals: calculatedTotals
         };
     });
 }

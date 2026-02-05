@@ -70,7 +70,9 @@ function getColumnIndices(headerRow) {
         ot3x: -1,
         calc1x: -1,
         calc1_5x: -1,
-        calc3x: -1
+        calc3x: -1,
+        leave: -1,
+        absent: -1
     };
 
     // Track if we've seen these columns before (for duplicates)
@@ -84,10 +86,37 @@ function getColumnIndices(headerRow) {
         console.log(`Column ${index}: "${cell}" (lowercase: "${cellStr}")`);
 
         // Match column names (flexible matching)
-        if (cellStr === '' && indices.name === -1) indices.name = index; // First empty column is usually name
-        else if (cellStr === '' && indices.date === -1 && indices.name !== -1) indices.date = index; // Second empty is date
-        else if (cellStr.includes('hrs')) indices.totalHours = index;
-        else if (cellStr === '2' || cellStr === '2 times') indices.ot2x = index;
+        if (cellStr === '' && indices.name === -1) {
+            indices.name = index; // First empty column is usually name
+        }
+        else if (cellStr === '' && indices.date === -1 && indices.name !== -1) {
+            indices.date = index; // Second empty is date
+        }
+        else if (cellStr.includes('hrs') && indices.totalHours === -1) {
+            indices.totalHours = index; // First HRS column
+        }
+        else if (cellStr === '2' || cellStr === '2 times') {
+            indices.ot2x = index;
+        }
+        // Leave and Absent columns - Column J (index 9) and K (index 10)
+        // Look for specific patterns or column positions
+        else if ((cellStr === 'l' || cellStr === 'leave' || cellStr.includes('ลา') || cellStr.includes('la')) && indices.leave === -1) {
+            indices.leave = index;
+            console.log('Found Leave column at index:', index);
+        }
+        else if ((cellStr === 'a' || cellStr === 'absent' || cellStr.includes('ขาด') || cellStr.includes('ab')) && indices.absent === -1) {
+            indices.absent = index;
+            console.log('Found Absent column at index:', index);
+        }
+        // Also check by position if columns J and K (9 and 10)
+        else if (index === 9 && indices.leave === -1) {
+            indices.leave = index;
+            console.log('Assigned Leave to column J (index 9)');
+        }
+        else if (index === 10 && indices.absent === -1) {
+            indices.absent = index;
+            console.log('Assigned Absent to column K (index 10)');
+        }
         // Handle duplicate columns - first occurrence is raw, second is calculated
         else if (cellStr === '1' || cellStr === '1 time') {
             if (!seen1) {
@@ -198,7 +227,9 @@ export function extractStructuredData(rawData) {
                     ot1x: 0,
                     ot1_5x: 0,
                     ot2x: 0,
-                    ot3x: 0
+                    ot3x: 0,
+                    leaveDays: 0,
+                    absentDays: 0
                 }
             };
             continue;
@@ -208,6 +239,9 @@ export function extractStructuredData(rawData) {
         if (currentEmployee && dateCell) {
             // Use the calculated OT columns (1_1, 1.5_2, 3_3) instead of raw time columns
             // These columns already have the OT hours calculated
+            const leaveValue = row[indices.leave];
+            const absentValue = row[indices.absent];
+
             const record = {
                 date: dateCell,
                 totalHours: row[indices.totalHours] || null,
@@ -215,14 +249,29 @@ export function extractStructuredData(rawData) {
                 ot1x: row[indices.ot1x] || null,      // Column 22 (W)
                 ot1_5x: row[indices.ot1_5x] || null,  // Column 23 (X)
                 ot2x: row[indices.ot2x] || null,      // Column 24 (Y)
-                ot3x: row[indices.ot3x] || null       // Column 25 (Z)
+                ot3x: row[indices.ot3x] || null,      // Column 25 (Z)
+                leave: leaveValue || null,
+                absent: absentValue || null
             };
 
-            // Debug first record
-            if (currentEmployee.dailyRecords.length === 0) {
-                console.log('First record for employee', currentEmployee.name, ':', record);
-                console.log('  Raw values - ot1x:', row[indices.ot1x], 'ot1_5x:', row[indices.ot1_5x], 'ot3x:', row[indices.ot3x]);
+            // Count leave and absent days
+            // Leave: count if column has any value (AL-, BD-, HL-, or just time like 1:00:00)
+            // Absent: count if column has any value (could be just time like 1:00:00)
+
+            if (leaveValue !== null && leaveValue !== undefined && leaveValue !== '') {
+                const leaveStr = String(leaveValue).trim();
+                if (leaveStr.length > 0) {
+                    currentEmployee.totals.leaveDays++;
+                }
             }
+
+            if (absentValue !== null && absentValue !== undefined && absentValue !== '') {
+                const absentStr = String(absentValue).trim();
+                if (absentStr.length > 0) {
+                    currentEmployee.totals.absentDays++;
+                }
+            }
+
 
             currentEmployee.dailyRecords.push(record);
         }
@@ -232,6 +281,12 @@ export function extractStructuredData(rawData) {
     if (currentEmployee) {
         employees.push(currentEmployee);
     }
+
+    // Debug: Log final totals
+    console.log('=== FINAL EMPLOYEE TOTALS ===');
+    employees.forEach(emp => {
+        console.log(`${emp.name}: Leave=${emp.totals.leaveDays}, Absent=${emp.totals.absentDays}`);
+    });
 
     return employees;
 }

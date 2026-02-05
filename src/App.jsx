@@ -3,10 +3,13 @@ import FileUpload from './components/FileUpload';
 import Dashboard from './components/Dashboard';
 import { parseExcelFile, extractStructuredData } from './utils/excelParser';
 import { transformEmployeeData, calculateSummary, getChartData } from './utils/dataTransformer';
+import { parseMasterDataFile } from './utils/masterDataParser';
+import { mergeEmployeeData, createSummaryTable } from './utils/dataMerger';
 import './App.css';
 
 function App() {
     const [data, setData] = useState(null);
+    const [masterData, setMasterData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -26,7 +29,12 @@ function App() {
             }
 
             // Transform data
-            const transformedEmployees = transformEmployeeData(employees);
+            let transformedEmployees = transformEmployeeData(employees);
+
+            // If we have master data, merge it
+            if (masterData) {
+                transformedEmployees = mergeEmployeeData(transformedEmployees, masterData);
+            }
 
             // Calculate summary
             const summary = calculateSummary(transformedEmployees);
@@ -34,10 +42,14 @@ function App() {
             // Get chart data
             const chartData = getChartData(transformedEmployees);
 
+            // Create summary table
+            const summaryRows = masterData ? createSummaryTable(transformedEmployees) : [];
+
             setData({
                 employees: transformedEmployees,
                 summary,
-                chartData
+                chartData,
+                summaryRows
             });
         } catch (err) {
             console.error('Error processing file:', err);
@@ -45,6 +57,29 @@ function App() {
             throw err;
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleMasterDataUpload = async (file) => {
+        try {
+            const parsedMasterData = await parseMasterDataFile(file);
+            setMasterData(parsedMasterData);
+
+            // If we already have attendance data, re-process with master data
+            if (data) {
+                const mergedEmployees = mergeEmployeeData(data.employees, parsedMasterData);
+                const summaryRows = createSummaryTable(mergedEmployees);
+                setData({
+                    ...data,
+                    employees: mergedEmployees,
+                    summaryRows
+                });
+            }
+
+            return true;
+        } catch (err) {
+            console.error('Error processing master data:', err);
+            throw err;
         }
     };
 
@@ -61,7 +96,27 @@ function App() {
                             <p className="app-subtitle">
                                 Transform your Eagle System attendance reports into actionable insights
                             </p>
-                            <FileUpload onFileProcessed={handleFileProcessed} />
+
+                            <div className="upload-section">
+                                <div className="upload-box">
+                                    <h3>📋 Step 1: Attendance Data</h3>
+                                    <FileUpload onFileProcessed={handleFileProcessed} />
+                                </div>
+
+                                <div className="upload-box master-data">
+                                    <h3>👥 Step 2: Employee Master Data (Optional)</h3>
+                                    <p className="upload-hint">Upload to enable department summary</p>
+                                    <FileUpload
+                                        onFileProcessed={handleMasterDataUpload}
+                                        label="Upload Master Data"
+                                    />
+                                    {masterData && (
+                                        <p className="success-message">
+                                            ✅ Master data loaded ({Object.keys(masterData).length} employees)
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
 
                             <div className="features">
                                 <div className="feature">
@@ -84,16 +139,31 @@ function App() {
                     </div>
                 ) : (
                     <>
-                        <button
-                            className="btn btn-secondary reset-btn"
-                            onClick={() => setData(null)}
-                        >
-                            ← Upload New File
-                        </button>
+                        <div className="dashboard-header">
+                            <button
+                                className="btn btn-secondary reset-btn"
+                                onClick={() => setData(null)}
+                            >
+                                ← Upload New File
+                            </button>
+
+                            {!masterData && (
+                                <div className="inline-upload">
+                                    <span>Add Master Data for Department Summary:</span>
+                                    <FileUpload
+                                        onFileProcessed={handleMasterDataUpload}
+                                        label="Upload Master Data"
+                                        compact
+                                    />
+                                </div>
+                            )}
+                        </div>
+
                         <Dashboard
                             employees={data.employees}
                             summary={data.summary}
                             chartData={data.chartData}
+                            summaryRows={data.summaryRows}
                         />
                     </>
                 )}

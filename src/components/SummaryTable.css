@@ -1,0 +1,178 @@
+.summary-table-container {
+    background: linear-gradient(180deg, var(--surface) 0%, rgba(26, 26, 26, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 0;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    animation: fadeInUp 0.6s ease backwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.summary-table-container .table-header {
+    background: linear-gradient(135deg, var(--kellogg-red), #ff4757);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary-table-container h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.summary-table-container .no-data {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 60px 40px;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin: 0;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.summary-table th {
+    background: rgba(228, 0, 43, 0.1);
+    color: var(--kellogg-red);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(228, 0, 43, 0.2);
+    position: sticky;
+    top: 0;
+}
+
+.summary-table th:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.summary-table .number {
+    text-align: right;
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    font-size: 0.85rem;
+    letter-spacing: -0.5px;
+}
+
+.summary-table .bold {
+    font-weight: 700;
+}
+
+/* Data rows */
+.summary-table .data-row {
+    background: transparent;
+    transition: all 0.25s ease;
+}
+
+.summary-table .data-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.summary-table .data-row:hover {
+    background: rgba(228, 0, 43, 0.08);
+    transform: scale(1.005);
+}
+
+.summary-table .data-row:hover td {
+    color: white;
+}
+
+/* Subtotal rows */
+.summary-table .subtotal-row {
+    background: linear-gradient(90deg, rgba(228, 0, 43, 0.12), rgba(228, 0, 43, 0.05));
+    border-top: 2px solid rgba(228, 0, 43, 0.3);
+    border-bottom: 2px solid rgba(228, 0, 43, 0.2);
+}
+
+.summary-table .subtotal-row td {
+    padding: 1.1rem 1.25rem;
+}
+
+.summary-table .subtotal-label {
+    font-weight: 700;
+    color: var(--kellogg-red);
+    font-size: 0.9rem;
+}
+
+/* Grand total row */
+.summary-table .grandtotal-row {
+    background: linear-gradient(90deg, rgba(228, 0, 43, 0.2), rgba(228, 0, 43, 0.1));
+    border-top: 3px solid var(--kellogg-red);
+}
+
+.summary-table .grandtotal-row td {
+    padding: 1.25rem;
+}
+
+.summary-table .grandtotal-label {
+    font-weight: 800;
+    font-size: 1rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-table .grandtotal-row .number {
+    font-size: 1rem;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .summary-table-container {
+        border-radius: 16px;
+    }
+
+    .summary-table-container .table-header {
+        padding: 1rem 1.25rem;
+    }
+
+    .summary-table {
+        min-width: 700px;
+        font-size: 0.85rem;
+    }
+
+    .summary-table th,
+    .summary-table td {
+        padding: 0.75rem 1rem;
+    }
+}

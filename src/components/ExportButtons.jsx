@@ -1,14 +1,14 @@
 import { exportToCSV, exportToExcel, exportToJSON } from '../utils/exportUtils';
 import './ExportButtons.css';
 
-export default function ExportButtons({ employees, summary }) {
+export default function ExportButtons({ employees, summary, summaryRows }) {
     const handleExport = (format) => {
         switch (format) {
             case 'csv':
                 exportToCSV(employees);
                 break;
             case 'excel':
-                exportToExcel(employees);
+                exportToExcel(employees, summaryRows);
                 break;
             case 'json':
                 exportToJSON(employees, summary);

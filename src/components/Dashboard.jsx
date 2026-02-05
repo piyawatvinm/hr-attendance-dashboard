@@ -1,4 +1,5 @@
 import SummaryCards from './SummaryCards';
+import SummaryTable from './SummaryTable';
 import OTByEmployee from './Charts/OTByEmployee';
 import OTTrend from './Charts/OTTrend';
 import OTByRate from './Charts/OTByRate';
@@ -6,7 +7,7 @@ import EmployeeTable from './EmployeeTable';
 import ExportButtons from './ExportButtons';
 import './Dashboard.css';
 
-export default function Dashboard({ employees, summary, chartData }) {
+export default function Dashboard({ employees, summary, chartData, summaryRows }) {
     return (
         <div className="dashboard">
             <div className="dashboard-header">
@@ -22,6 +23,9 @@ export default function Dashboard({ employees, summary, chartData }) {
             </div>
 
             <SummaryCards summary={summary} />
+
+            {/* Summary Table - shows when master data is loaded */}
+            <SummaryTable summaryRows={summaryRows} />
 
             <div className="charts-grid">
                 <div className="chart-large">
@@ -39,7 +43,7 @@ export default function Dashboard({ employees, summary, chartData }) {
 
             <EmployeeTable employees={employees} />
 
-            <ExportButtons employees={employees} summary={summary} />
+            <ExportButtons employees={employees} summary={summary} summaryRows={summaryRows} />
         </div>
     );
 }

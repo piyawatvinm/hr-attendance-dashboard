@@ -1,6 +1,28 @@
 .app {
     min-height: 100vh;
     background: var(--background);
+    position: relative;
+}
+
+/* Animated background pattern */
+.app::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(228, 0, 43, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(228, 0, 43, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
 }
 
 .welcome-screen {
@@ -9,18 +31,33 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    animation: welcomeFadeIn 0.8s ease;
+}
+
+@keyframes welcomeFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .welcome-content {
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
     text-align: center;
 }
 
 .app-title {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--kellogg-red), var(--kellogg-red-light));
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--kellogg-red), #ff6b81, var(--kellogg-red-light));
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -28,61 +65,195 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% center;
+    }
+
+    50% {
+        background-position: 100% center;
+    }
 }
 
 .app-title .icon {
-    font-size: 3.5rem;
-    filter: drop-shadow(0 4px 12px rgba(228, 0, 43, 0.3));
+    font-size: 4rem;
+    filter: drop-shadow(0 4px 12px rgba(228, 0, 43, 0.4));
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .app-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+/* Upload Section */
+.upload-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
+.upload-box {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: rgba(228, 0, 43, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.upload-box h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.upload-box .upload-hint {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.upload-box .success-message {
+    color: #00E676;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+/* Features */
 .features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-top: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
 }
 
 .feature {
     padding: 2rem;
-    background: var(--surface-glass);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    transition: all var(--transition-normal);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feature:hover {
-    transform: translateY(-4px);
-    border-color: var(--kellogg-red);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-8px);
+    border-color: rgba(228, 0, 43, 0.4);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(228, 0, 43, 0.1);
 }
 
 .feature-icon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.feature:hover .feature-icon {
+    transform: scale(1.15) rotate(5deg);
 }
 
 .feature h3 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin: 0 0 0.5rem 0;
+    font-weight: 700;
 }
 
 .feature p {
     color: var(--text-secondary);
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Dashboard Header with inline upload */
+.dashboard-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.inline-upload {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.inline-upload:hover {
+    border-color: var(--kellogg-red);
+    background: rgba(228, 0, 43, 0.05);
+}
+
+.inline-upload span {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
 }
 
 .reset-btn {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
 }
 
+/* Compact upload */
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+}
+
+.file-upload-compact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.file-upload-compact .error-text {
+    color: #FF5252;
+    font-size: 0.75rem;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .app-title {
         font-size: 2rem;
@@ -90,7 +261,7 @@
     }
 
     .app-title .icon {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .app-subtitle {
@@ -98,6 +269,10 @@
     }
 
     .features {
+        grid-template-columns: 1fr;
+    }
+
+    .upload-section {
         grid-template-columns: 1fr;
     }
 }
