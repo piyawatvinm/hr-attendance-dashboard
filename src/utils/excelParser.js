@@ -63,6 +63,7 @@ function getColumnIndices(headerRow) {
     const indices = {
         name: -1,
         date: -1,
+        work: 7,  // Column H = index 7 for "Work" (days worked)
         totalHours: -1,
         ot1x: -1,
         ot1_5x: -1,
@@ -241,9 +242,11 @@ export function extractStructuredData(rawData) {
             // These columns already have the OT hours calculated
             const leaveValue = row[indices.leave];
             const absentValue = row[indices.absent];
+            const workValue = row[indices.work];  // Column H for Work
 
             const record = {
                 date: dateCell,
+                work: workValue || null,  // Column H - if has value, means worked that day
                 totalHours: row[indices.totalHours] || null,
                 // Use first occurrence columns (22, 23, 25) for OT hours
                 ot1x: row[indices.ot1x] || null,      // Column 22 (W)

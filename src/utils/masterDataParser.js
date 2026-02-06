@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 
 /**
  * Parse Employee Master Data Excel file
- * Columns: B (Employee ID), J (Plant/Division), K (Employee Type)
+ * Columns: B (Employee ID), J (Plant/Division), K (Employee Type), S (Cost Center)
  */
 export function parseMasterDataFile(file) {
     return new Promise((resolve, reject) => {
@@ -63,10 +63,11 @@ function extractMasterData(rows) {
         const row = rows[i];
         if (!row || row.length === 0) continue;
 
-        // Column indices: B=1, J=9, K=10
+        // Column indices: B=1, J=9, K=10, S=18 (Cost Center)
         const employeeId = row[1];
         const plantDivision = row[9];
         const employeeType = row[10];
+        const costCenter = row[18];
 
         // Skip if no employee ID
         if (!employeeId) continue;
@@ -77,7 +78,8 @@ function extractMasterData(rows) {
             masterData[id] = {
                 employeeId: id,
                 plantDivision: plantDivision ? String(plantDivision).trim() : '',
-                employeeType: employeeType ? String(employeeType).trim() : ''
+                employeeType: employeeType ? String(employeeType).trim() : '',
+                costCenter: costCenter ? String(costCenter).trim() : ''
             };
         }
     }

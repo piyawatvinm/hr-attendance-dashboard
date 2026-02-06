@@ -22,6 +22,7 @@ export function mergeEmployeeData(employees, masterData) {
                 ...emp,
                 plantDivision: master.plantDivision,
                 employeeType: master.employeeType,
+                costCenter: master.costCenter,
                 category: category.category,
                 subCategory: category.subCategory
             };
@@ -31,6 +32,7 @@ export function mergeEmployeeData(employees, masterData) {
                 ...emp,
                 plantDivision: '',
                 employeeType: '',
+                costCenter: '',
                 category: 'Unknown',
                 subCategory: 'Unknown'
             };

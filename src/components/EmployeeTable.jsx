@@ -65,6 +65,10 @@ export default function EmployeeTable({ employees }) {
                 aVal = a.category || '';
                 bVal = b.category || '';
                 break;
+            case 'costCenter':
+                aVal = a.costCenter || '';
+                bVal = b.costCenter || '';
+                break;
             default:
                 aVal = a.totals.totalOT;
                 bVal = b.totals.totalOT;
@@ -112,8 +116,11 @@ export default function EmployeeTable({ employees }) {
                             <th onClick={() => handleSort('category')} className="sortable">
                                 Category {sortField === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
+                            <th onClick={() => handleSort('costCenter')} className="sortable">
+                                Cost Center {sortField === 'costCenter' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
                             <th onClick={() => handleSort('totalHours')} className="sortable">
-                                Total Hours {sortField === 'totalHours' && (sortDirection === 'asc' ? '↑' : '↓')}
+                                Days Worked {sortField === 'totalHours' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
                             <th onClick={() => handleSort('totalOT')} className="sortable">
                                 Total OT {sortField === 'totalOT' && (sortDirection === 'asc' ? '↑' : '↓')}
@@ -139,7 +146,8 @@ export default function EmployeeTable({ employees }) {
                                 <td>{emp.plantDivision || '-'}</td>
                                 <td>{emp.employeeType || '-'}</td>
                                 <td>{emp.category || '-'}</td>
-                                <td>{formatHours(emp.totals.totalHours)}</td>
+                                <td>{emp.costCenter || '-'}</td>
+                                <td>{emp.totals.totalHours}</td>
                                 <td className="highlight">{formatHours(emp.totals.totalOT)}</td>
                                 <td>{formatHours(emp.totals.ot1x)}</td>
                                 <td>{formatHours(emp.totals.ot1_5x)}</td>

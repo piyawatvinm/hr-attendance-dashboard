@@ -32,10 +32,10 @@ function useAnimatedCounter(endValue, duration = 1000) {
 export default function SummaryCards({ summary }) {
     const cards = [
         {
-            title: 'Total Work Hours',
+            title: 'Total Days Worked',
             value: summary.totalHours,
-            displayValue: formatHours(summary.totalHours),
-            icon: '⏱️',
+            displayValue: summary.totalHours,
+            icon: '📅',
             gradient: 'linear-gradient(135deg, #00C853, #00E676)',
             bgGradient: 'linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 230, 118, 0.05))',
             iconBg: 'rgba(0, 200, 83, 0.2)'

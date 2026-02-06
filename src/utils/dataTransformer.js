@@ -9,27 +9,31 @@ export function transformEmployeeData(employees) {
         const transformedRecords = employee.dailyRecords.map(record => ({
             date: parseEagleDate(record.date),
             dateStr: record.date,
-            totalHours: excelTimeToHours(record.totalHours),
+            // Check if worked - Column H (Work) has value like "1:00:00" means worked that day
+            worked: record.work !== null && record.work !== undefined && record.work !== '',
             ot1x: excelTimeToHours(record.ot1x),
             ot1_5x: excelTimeToHours(record.ot1_5x),
             ot2x: excelTimeToHours(record.ot2x),
             ot3x: excelTimeToHours(record.ot3x)
         }));
 
-        // Calculate totals from transformed records
+        // Calculate totals - count days worked instead of summing hours
+        const daysWorked = transformedRecords.filter(r => r.worked).length;
+
         const calculatedTotals = transformedRecords.reduce((acc, record) => ({
-            totalHours: acc.totalHours + record.totalHours,
             ot1x: acc.ot1x + record.ot1x,
             ot1_5x: acc.ot1_5x + record.ot1_5x,
             ot2x: acc.ot2x + record.ot2x,
             ot3x: acc.ot3x + record.ot3x
         }), {
-            totalHours: 0,
             ot1x: 0,
             ot1_5x: 0,
             ot2x: 0,
             ot3x: 0
         });
+
+        // Total hours is now days worked
+        calculatedTotals.totalHours = daysWorked;
 
         // Calculate total OT
         calculatedTotals.totalOT = calculatedTotals.ot1x + calculatedTotals.ot1_5x + calculatedTotals.ot2x + calculatedTotals.ot3x;

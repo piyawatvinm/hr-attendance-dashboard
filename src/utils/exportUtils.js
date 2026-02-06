@@ -14,13 +14,13 @@ export function exportToCSV(employees) {
         'Department',
         'Plant/Division',
         'Employee Type',
-        'Total Hours',
+        'Cost Center',
+        'Days Worked',
         'OT 1x (hrs)',
         'OT 1.5x (hrs)',
         'OT 2x (hrs)',
         'OT 3x (hrs)',
         'Total OT (hrs)',
-        'Days Worked',
         'Leave Days',
         'Absent Days'
     ]);
@@ -34,13 +34,13 @@ export function exportToCSV(employees) {
             emp.department,
             emp.plantDivision || '',
             emp.employeeType || '',
-            emp.totals.totalHours.toFixed(2),
+            emp.costCenter || '',
+            emp.totals.totalHours,
             emp.totals.ot1x.toFixed(2),
             emp.totals.ot1_5x.toFixed(2),
             emp.totals.ot2x.toFixed(2),
             emp.totals.ot3x.toFixed(2),
             emp.totals.totalOT.toFixed(2),
-            emp.dailyRecords.length,
             emp.totals.leaveDays || 0,
             emp.totals.absentDays || 0
         ]);
@@ -54,14 +54,87 @@ export function exportToCSV(employees) {
 }
 
 /**
- * Export data to Excel format with 2 sheets:
- * Sheet 1: Employee Details (1 row per employee)
- * Sheet 2: Summary by Department
+ * Export data to Excel format with 3 sheets:
+ * Sheet 1: Daily Details (1 row per day per employee)
+ * Sheet 2: Employee Summary (1 row per employee)
+ * Sheet 3: Summary by Department
  */
 export function exportToExcel(employees, summaryRows = []) {
     const wb = XLSX.utils.book_new();
 
-    // ===== Sheet 1: Employee Details =====
+    // ===== Sheet 1: Daily Details =====
+    const dailyData = [];
+
+    // Header row
+    dailyData.push([
+        'Date',
+        'Employee ID',
+        'Name',
+        'Position',
+        'Department',
+        'Plant/Division',
+        'Employee Type',
+        'Cost Center',
+        'Category',
+        'Worked',
+        'OT 1x (hrs)',
+        'OT 1.5x (hrs)',
+        'OT 2x (hrs)',
+        'OT 3x (hrs)',
+        'Total OT (hrs)'
+    ]);
+
+    // Daily data rows
+    employees.forEach(emp => {
+        emp.dailyRecords.forEach(record => {
+            const dateStr = record.date
+                ? record.date.toLocaleDateString('en-GB')  // DD/MM/YYYY format
+                : record.dateStr || '';
+
+            dailyData.push([
+                dateStr,
+                emp.id,
+                emp.name,
+                emp.position,
+                emp.department,
+                emp.plantDivision || '',
+                emp.employeeType || '',
+                emp.costCenter || '',
+                emp.category || '',
+                record.worked ? 'Y' : 'N',
+                record.ot1x || 0,
+                record.ot1_5x || 0,
+                record.ot2x || 0,
+                record.ot3x || 0,
+                (record.ot1x || 0) + (record.ot1_5x || 0) + (record.ot2x || 0) + (record.ot3x || 0)
+            ]);
+        });
+    });
+
+    const wsDaily = XLSX.utils.aoa_to_sheet(dailyData);
+
+    // Set column widths
+    wsDaily['!cols'] = [
+        { wch: 12 }, // Date
+        { wch: 12 }, // Employee ID
+        { wch: 25 }, // Name
+        { wch: 30 }, // Position
+        { wch: 15 }, // Department
+        { wch: 18 }, // Plant/Division
+        { wch: 15 }, // Employee Type
+        { wch: 15 }, // Cost Center
+        { wch: 15 }, // Category
+        { wch: 8 },  // Worked
+        { wch: 12 }, // OT 1x
+        { wch: 12 }, // OT 1.5x
+        { wch: 12 }, // OT 2x
+        { wch: 12 }, // OT 3x
+        { wch: 12 }  // Total OT
+    ];
+
+    XLSX.utils.book_append_sheet(wb, wsDaily, 'Daily Details');
+
+    // ===== Sheet 2: Employee Summary =====
     const detailData = [];
 
     // Header row
@@ -72,14 +145,14 @@ export function exportToExcel(employees, summaryRows = []) {
         'Department',
         'Plant/Division',
         'Employee Type',
+        'Cost Center',
         'Category',
-        'Total Hours',
+        'Days Worked',
         'OT 1x (hrs)',
         'OT 1.5x (hrs)',
         'OT 2x (hrs)',
         'OT 3x (hrs)',
         'Total OT (hrs)',
-        'Days Worked',
         'Leave Days',
         'Absent Days'
     ]);
@@ -93,14 +166,14 @@ export function exportToExcel(employees, summaryRows = []) {
             emp.department,
             emp.plantDivision || '',
             emp.employeeType || '',
+            emp.costCenter || '',
             emp.category || '',
-            emp.totals.totalHours,
+            emp.totals.totalHours,  // Now represents days worked
             emp.totals.ot1x,
             emp.totals.ot1_5x,
             emp.totals.ot2x,
             emp.totals.ot3x,
             emp.totals.totalOT,
-            emp.dailyRecords.length,
             emp.totals.leaveDays || 0,
             emp.totals.absentDays || 0
         ]);
@@ -116,21 +189,21 @@ export function exportToExcel(employees, summaryRows = []) {
         { wch: 15 }, // Department
         { wch: 18 }, // Plant/Division
         { wch: 15 }, // Employee Type
+        { wch: 15 }, // Cost Center
         { wch: 15 }, // Category
-        { wch: 12 }, // Total Hours
+        { wch: 12 }, // Days Worked
         { wch: 12 }, // OT 1x
         { wch: 12 }, // OT 1.5x
         { wch: 12 }, // OT 2x
         { wch: 12 }, // OT 3x
         { wch: 12 }, // Total OT
-        { wch: 12 }, // Days Worked
         { wch: 12 }, // Leave Days
         { wch: 12 }  // Absent Days
     ];
 
-    XLSX.utils.book_append_sheet(wb, wsDetail, 'Employee Details');
+    XLSX.utils.book_append_sheet(wb, wsDetail, 'Employee Summary');
 
-    // ===== Sheet 2: Summary by Department =====
+    // ===== Sheet 3: Summary by Department =====
     const summaryData = [];
 
     // Header row
@@ -228,9 +301,10 @@ export function exportToJSON(employees, summary) {
         department: emp.department,
         plantDivision: emp.plantDivision || '',
         employeeType: emp.employeeType || '',
+        costCenter: emp.costCenter || '',
         category: emp.category || '',
         totals: emp.totals,
-        daysWorked: emp.dailyRecords.length
+        daysWorked: emp.totals.totalHours
     }));
 
     const jsonData = {
