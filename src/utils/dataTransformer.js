@@ -11,6 +11,9 @@ export function transformEmployeeData(employees) {
             dateStr: record.date,
             // Check if worked - Column H (Work) has value like "1:00:00" means worked that day
             worked: record.work !== null && record.work !== undefined && record.work !== '',
+            // Leave and Absent flags
+            leave: record.leave !== null && record.leave !== undefined && record.leave !== '',
+            absent: record.absent !== null && record.absent !== undefined && record.absent !== '',
             ot1x: excelTimeToHours(record.ot1x),
             ot1_5x: excelTimeToHours(record.ot1_5x),
             ot2x: excelTimeToHours(record.ot2x),

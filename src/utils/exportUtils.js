@@ -77,6 +77,8 @@ export function exportToExcel(employees, summaryRows = []) {
         'Cost Center',
         'Category',
         'Worked',
+        'Leave',
+        'Absent',
         'OT 1x (hrs)',
         'OT 1.5x (hrs)',
         'OT 2x (hrs)',
@@ -102,6 +104,8 @@ export function exportToExcel(employees, summaryRows = []) {
                 emp.costCenter || '',
                 emp.category || '',
                 record.worked ? 'Y' : 'N',
+                record.leave ? 'Y' : '',
+                record.absent ? 'Y' : '',
                 record.ot1x || 0,
                 record.ot1_5x || 0,
                 record.ot2x || 0,
@@ -125,6 +129,8 @@ export function exportToExcel(employees, summaryRows = []) {
         { wch: 15 }, // Cost Center
         { wch: 15 }, // Category
         { wch: 8 },  // Worked
+        { wch: 8 },  // Leave
+        { wch: 8 },  // Absent
         { wch: 12 }, // OT 1x
         { wch: 12 }, // OT 1.5x
         { wch: 12 }, // OT 2x
