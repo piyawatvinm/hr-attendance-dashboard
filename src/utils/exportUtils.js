@@ -103,9 +103,9 @@ export function exportToExcel(employees, summaryRows = []) {
                 emp.employeeType || '',
                 emp.costCenter || '',
                 emp.category || '',
-                record.worked ? 'Y' : 'N',
-                record.leave ? 'Y' : '',
-                record.absent ? 'Y' : '',
+                record.workDays || 0,     // Decimal: 1 = full day, 0.5 = half day
+                record.leaveDays || 0,    // Decimal: 1 = full day, 0.5 = half day
+                record.absentDays || 0,   // Decimal: 1 = full day, 0.5 = half day
                 record.ot1x || 0,
                 record.ot1_5x || 0,
                 record.ot2x || 0,

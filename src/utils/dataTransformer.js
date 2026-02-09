@@ -1,4 +1,4 @@
-import { excelTimeToHours, parseEagleDate } from './dateUtils';
+import { excelTimeToHours, parseEagleDate, parseDayValue } from './dateUtils';
 
 /**
  * Transform raw employee data into clean, structured format
@@ -6,44 +6,59 @@ import { excelTimeToHours, parseEagleDate } from './dateUtils';
 export function transformEmployeeData(employees) {
     return employees.map(employee => {
         // Transform daily records
-        const transformedRecords = employee.dailyRecords.map(record => ({
-            date: parseEagleDate(record.date),
-            dateStr: record.date,
-            // Check if worked - Column H (Work) has value like "1:00:00" means worked that day
-            worked: record.work !== null && record.work !== undefined && record.work !== '',
-            // Leave and Absent flags
-            leave: record.leave !== null && record.leave !== undefined && record.leave !== '',
-            absent: record.absent !== null && record.absent !== undefined && record.absent !== '',
-            ot1x: excelTimeToHours(record.ot1x),
-            ot1_5x: excelTimeToHours(record.ot1_5x),
-            ot2x: excelTimeToHours(record.ot2x),
-            ot3x: excelTimeToHours(record.ot3x)
-        }));
+        const transformedRecords = employee.dailyRecords.map(record => {
+            // Parse day values (1:00:00 = 1 day, 0:04:00 = 0.5 day)
+            const rawWorkDays = parseDayValue(record.work);
+            const leaveDays = parseDayValue(record.leave);
+            const absentDays = parseDayValue(record.absent);
 
-        // Calculate totals - count days worked instead of summing hours
-        const daysWorked = transformedRecords.filter(r => r.worked).length;
+            // Actual worked days = raw work - leave - absent
+            // Example: Work=1, Leave=0.5 → actualWorked = 1 - 0.5 = 0.5
+            const actualWorkedDays = Math.max(0, rawWorkDays - leaveDays - absentDays);
 
+            return {
+                date: parseEagleDate(record.date),
+                dateStr: record.date,
+                // Day values as decimals
+                workDays: actualWorkedDays,  // Net worked days after deductions
+                leaveDays: leaveDays,
+                absentDays: absentDays,
+                // Boolean flags for simple checks
+                worked: actualWorkedDays > 0,
+                leave: leaveDays > 0,
+                absent: absentDays > 0,
+                // OT hours
+                ot1x: excelTimeToHours(record.ot1x),
+                ot1_5x: excelTimeToHours(record.ot1_5x),
+                ot2x: excelTimeToHours(record.ot2x),
+                ot3x: excelTimeToHours(record.ot3x)
+            };
+        });
+
+        // Calculate totals - sum decimal days
         const calculatedTotals = transformedRecords.reduce((acc, record) => ({
+            daysWorked: acc.daysWorked + record.workDays,
+            leaveDays: acc.leaveDays + record.leaveDays,
+            absentDays: acc.absentDays + record.absentDays,
             ot1x: acc.ot1x + record.ot1x,
             ot1_5x: acc.ot1_5x + record.ot1_5x,
             ot2x: acc.ot2x + record.ot2x,
             ot3x: acc.ot3x + record.ot3x
         }), {
+            daysWorked: 0,
+            leaveDays: 0,
+            absentDays: 0,
             ot1x: 0,
             ot1_5x: 0,
             ot2x: 0,
             ot3x: 0
         });
 
-        // Total hours is now days worked
-        calculatedTotals.totalHours = daysWorked;
+        // Total hours is now days worked (for backward compatibility)
+        calculatedTotals.totalHours = calculatedTotals.daysWorked;
 
         // Calculate total OT
         calculatedTotals.totalOT = calculatedTotals.ot1x + calculatedTotals.ot1_5x + calculatedTotals.ot2x + calculatedTotals.ot3x;
-
-        // Preserve leaveDays and absentDays from original data
-        calculatedTotals.leaveDays = employee.totals.leaveDays || 0;
-        calculatedTotals.absentDays = employee.totals.absentDays || 0;
 
         return {
             id: employee.id,
@@ -55,6 +70,7 @@ export function transformEmployeeData(employees) {
         };
     });
 }
+
 
 /**
  * Calculate summary statistics

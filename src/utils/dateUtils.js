@@ -104,3 +104,73 @@ export function formatHours(hours) {
 
     return `${h}:${String(m).padStart(2, '0')}`;
 }
+
+/**
+ * Parse day value from time format in Work/Leave/Absent columns
+ * Examples:
+ *   "1:00:00" -> 1.0 (full day)
+ *   "0:04:00" -> 0.5 (half day)
+ *   "SL-0:04:00" -> 0.5 (half day sick leave, prefix stripped)
+ *   "AL-1:00:00" -> 1.0 (full day annual leave, prefix stripped)
+ *   Excel time fraction 0.0416... -> 1.0 (full day)
+ *   Excel time fraction 0.00277... -> 0.5 (half day - 4 minutes)
+ */
+export function parseDayValue(value) {
+    if (!value && value !== 0) return 0;
+
+    // If it's a number (Excel time fraction)
+    if (typeof value === 'number') {
+        // Excel stores time as fraction of 24 hours
+        // 1:00:00 = 1/24 = 0.0416667
+        // 0:04:00 = 4 minutes = 4/(24*60) = 0.00277778
+        const hours = value * 24;
+
+        // 1 hour = 1 day worked
+        if (hours >= 0.9) return 1;
+        // Around 4 minutes (0.0667 hours) = half day
+        if (hours > 0 && hours < 0.9) return 0.5;
+        return 0;
+    }
+
+    // If it's a string
+    if (typeof value === 'string') {
+        let timeStr = value.trim();
+
+        // Strip prefix like "SL-", "AL-", "BD-", "HL-" etc.
+        const prefixMatch = timeStr.match(/^[A-Z]+-(.+)$/);
+        if (prefixMatch) {
+            timeStr = prefixMatch[1];
+        }
+
+        // Parse HH:MM:SS or H:MM:SS format
+        const timeMatch = timeStr.match(/^(\d+):(\d+):(\d+)$/);
+        if (timeMatch) {
+            const hours = parseInt(timeMatch[1], 10);
+            const minutes = parseInt(timeMatch[2], 10);
+
+            // 1:00:00 = 1 day
+            if (hours >= 1) return 1;
+            // 0:04:00 = half day (4 minutes)
+            if (minutes === 4 || (minutes > 0 && minutes < 30)) return 0.5;
+            if (hours === 0 && minutes === 0) return 0;
+            return 0.5; // Default for any other small time
+        }
+
+        // If just has content but doesn't match pattern, count as 1
+        if (timeStr.length > 0) return 1;
+    }
+
+    // If it's a Date object
+    if (value instanceof Date) {
+        const hours = value.getHours();
+        const minutes = value.getMinutes();
+
+        if (hours >= 1) return 1;
+        if (minutes === 4) return 0.5;
+        if (hours === 0 && minutes === 0) return 0;
+        return 0.5;
+    }
+
+    return 0;
+}
+
