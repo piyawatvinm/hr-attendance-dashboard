@@ -6,6 +6,9 @@ export default function EmployeeTable({ employees }) {
     const [sortField, setSortField] = useState('totalOT');
     const [sortDirection, setSortDirection] = useState('desc');
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage] = useState(10);
+
 
     const handleSort = (field) => {
         if (sortField === field) {
@@ -83,6 +86,12 @@ export default function EmployeeTable({ employees }) {
         }
     });
 
+    // Pagination
+    const totalPages = Math.ceil(sortedEmployees.length / rowsPerPage);
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const paginatedEmployees = sortedEmployees.slice(startIndex, endIndex);
+
     return (
         <div className="employee-table-container">
             <div className="table-header">
@@ -138,7 +147,7 @@ export default function EmployeeTable({ employees }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedEmployees.map((emp, index) => (
+                        {paginatedEmployees.map((emp, index) => (
                             <tr key={emp.id} className="fade-in" style={{ animationDelay: `${index * 20}ms` }}>
                                 <td className="employee-name">{emp.name}</td>
                                 <td className="employee-id">{emp.id}</td>
@@ -162,7 +171,42 @@ export default function EmployeeTable({ employees }) {
             </div>
 
             <div className="table-footer">
-                Showing {sortedEmployees.length} of {employees.length} employees
+                <div className="pagination-info">
+                    Showing {startIndex + 1}-{Math.min(endIndex, sortedEmployees.length)} of {sortedEmployees.length} employees
+                </div>
+                <div className="pagination-controls">
+                    <button
+                        onClick={() => setCurrentPage(1)}
+                        disabled={currentPage === 1}
+                        className="pagination-btn"
+                    >
+                        ««
+                    </button>
+                    <button
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="pagination-btn"
+                    >
+                        ‹
+                    </button>
+                    <span className="pagination-pages">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="pagination-btn"
+                    >
+                        ›
+                    </button>
+                    <button
+                        onClick={() => setCurrentPage(totalPages)}
+                        disabled={currentPage === totalPages}
+                        className="pagination-btn"
+                    >
+                        »»
+                    </button>
+                </div>
             </div>
         </div>
     );

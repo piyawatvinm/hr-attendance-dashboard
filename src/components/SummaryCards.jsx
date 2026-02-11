@@ -59,6 +59,15 @@ export default function SummaryCards({ summary }) {
             iconBg: 'rgba(41, 121, 255, 0.2)'
         },
         {
+            title: 'Employees Over 60 hrs',
+            value: summary.employeesOver60 || 0,
+            displayValue: summary.employeesOver60 || 0,
+            icon: '⚠️',
+            gradient: 'linear-gradient(135deg, #E40029, #FF6B81)',
+            bgGradient: 'linear-gradient(135deg, rgba(228, 0, 41, 0.15), rgba(255, 107, 129, 0.05))',
+            iconBg: 'rgba(228, 0, 41, 0.2)'
+        },
+        {
             title: 'Avg OT / Employee',
             value: summary.avgOTPerEmployee,
             displayValue: formatHours(summary.avgOTPerEmployee),

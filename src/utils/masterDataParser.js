@@ -63,10 +63,11 @@ function extractMasterData(rows) {
         const row = rows[i];
         if (!row || row.length === 0) continue;
 
-        // Column indices: B=1, J=9, K=10, S=18 (Cost Center)
+        // Column indices: B=1, J=9, K=10, L=11 (Team), S=18 (Cost Center)
         const employeeId = row[1];
         const plantDivision = row[9];
         const employeeType = row[10];
+        const team = row[11];
         const costCenter = row[18];
 
         // Skip if no employee ID
@@ -79,6 +80,7 @@ function extractMasterData(rows) {
                 employeeId: id,
                 plantDivision: plantDivision ? String(plantDivision).trim() : '',
                 employeeType: employeeType ? String(employeeType).trim() : '',
+                team: team ? String(team).trim() : '',
                 costCenter: costCenter ? String(costCenter).trim() : ''
             };
         }

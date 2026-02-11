@@ -12,98 +12,104 @@
     }
 }
 
+/* ─── Header ─────────────────────────────── */
 .dashboard>.dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2.5rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, rgba(228, 0, 43, 0.08), rgba(228, 0, 43, 0.02));
-    border: 1px solid rgba(228, 0, 43, 0.15);
+    padding: 2rem 2.5rem;
+    background: linear-gradient(135deg, rgba(228, 0, 43, 0.12), rgba(228, 0, 43, 0.04));
+    border: 1px solid rgba(228, 0, 43, 0.2);
     border-radius: 24px;
     flex-wrap: wrap;
     gap: 1.5rem;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .dashboard>.dashboard-header::before {
     content: '';
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 300px;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
     background: radial-gradient(circle, rgba(228, 0, 43, 0.1) 0%, transparent 70%);
     pointer-events: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.header-subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.header-icon {
+    font-size: 3rem;
+    filter: drop-shadow(0 4px 12px rgba(228, 0, 43, 0.4));
 }
 
 .dashboard>.dashboard-header h1 {
     margin: 0;
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 900;
     background: linear-gradient(135deg, var(--kellogg-red), #ff6b81);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    position: relative;
-    z-index: 1;
+    letter-spacing: -0.5px;
 }
 
 .dashboard>.dashboard-header p {
-    margin: 0.5rem 0 0 0;
+    margin: 0;
     color: var(--text-secondary);
     font-size: 0.95rem;
+    font-weight: 500;
 }
 
-.company-logo {
-    height: 55px;
-    filter: brightness(0) invert(1);
-    opacity: 0.95;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
+/* ─── Section Layout ────────────────────── */
+.dashboard-section {
+    margin-bottom: 2.5rem;
+    animation: sectionFadeIn 0.5s ease backwards;
 }
 
-.company-logo:hover {
-    transform: scale(1.05);
-    opacity: 1;
-}
-
-/* Charts Grid */
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.chart-large,
-.chart-small {
-    background: linear-gradient(180deg, var(--surface) 0%, rgba(26, 26, 26, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-    animation: chartFadeIn 0.6s ease backwards;
-}
-
-.chart-large:nth-child(1) {
+.dashboard-section:nth-child(2) {
     animation-delay: 0.1s;
 }
 
-.chart-large:nth-child(2) {
+.dashboard-section:nth-child(3) {
     animation-delay: 0.2s;
 }
 
-.chart-small {
+.dashboard-section:nth-child(4) {
     animation-delay: 0.3s;
 }
 
-@keyframes chartFadeIn {
+.dashboard-section:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+@keyframes sectionFadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(16px);
     }
 
     to {
@@ -112,13 +118,83 @@
     }
 }
 
-.chart-large:hover,
-.chart-small:hover {
-    border-color: rgba(228, 0, 43, 0.3);
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-left: 0.25rem;
+}
+
+.section-label-clickable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    padding: 0.5rem 0.75rem;
+    margin-left: -0.75rem;
+    border-radius: 8px;
+}
+
+.section-label-clickable:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.section-toggle {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.section-icon {
+    font-size: 1.25rem;
+}
+
+.section-label span:not(.section-icon):not(.section-toggle) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.section-subtitle {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-transform: none !important;
+    letter-spacing: 0.3px !important;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+/* ─── Charts Grid ───────────────────────── */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.chart-card {
+    background: linear-gradient(180deg, var(--surface) 0%, rgba(26, 26, 26, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+    border-color: rgba(228, 0, 43, 0.25);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive */
+.chart-card-wide {
+    grid-column: 1 / -1;
+}
+
+/* ─── Responsive ────────────────────────── */
 @media (max-width: 1200px) {
     .charts-grid {
         grid-template-columns: 1fr;
@@ -127,26 +203,29 @@
 
 @media (max-width: 768px) {
     .dashboard>.dashboard-header {
-        padding: 1.5rem;
+        padding: 1.25rem;
         border-radius: 16px;
         flex-direction: column;
         align-items: flex-start;
     }
 
     .dashboard>.dashboard-header h1 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
 
-    .company-logo {
-        height: 40px;
+    .header-icon {
+        font-size: 2rem;
     }
 
     .charts-grid {
         grid-template-columns: 1fr;
     }
 
-    .chart-large,
-    .chart-small {
+    .chart-card {
         border-radius: 16px;
+    }
+
+    .section-label span:last-child {
+        font-size: 0.85rem;
     }
 }

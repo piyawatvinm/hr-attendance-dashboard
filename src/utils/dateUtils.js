@@ -174,3 +174,22 @@ export function parseDayValue(value) {
     return 0;
 }
 
+/**
+ * Parse leave value and determine if it's Sick Leave or regular Leave
+ * SL- prefix = Sick Leave, everything else = regular Leave
+ * @returns {{ isSickLeave: boolean, days: number }}
+ */
+export function parseLeaveType(value) {
+    if (!value && value !== 0) return { isSickLeave: false, days: 0 };
+
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        const isSickLeave = /^SL-/i.test(trimmed);
+        const days = parseDayValue(value);
+        return { isSickLeave, days };
+    }
+
+    // For non-string values, treat as regular leave
+    const days = parseDayValue(value);
+    return { isSickLeave: false, days };
+}

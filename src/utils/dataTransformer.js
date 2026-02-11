@@ -1,4 +1,4 @@
-import { excelTimeToHours, parseEagleDate, parseDayValue } from './dateUtils';
+import { excelTimeToHours, parseEagleDate, parseDayValue, parseLeaveType } from './dateUtils';
 
 /**
  * Transform raw employee data into clean, structured format
@@ -9,56 +9,81 @@ export function transformEmployeeData(employees) {
         const transformedRecords = employee.dailyRecords.map(record => {
             // Parse day values (1:00:00 = 1 day, 0:04:00 = 0.5 day)
             const rawWorkDays = parseDayValue(record.work);
-            const leaveDays = parseDayValue(record.leave);
             const absentDays = parseDayValue(record.absent);
 
-            // Actual worked days = raw work - leave - absent
-            // Example: Work=1, Leave=0.5 → actualWorked = 1 - 0.5 = 0.5
-            const actualWorkedDays = Math.max(0, rawWorkDays - leaveDays - absentDays);
+            // Parse leave and separate sick leave from regular leave
+            const leaveInfo = parseLeaveType(record.leave);
+            const sickLeaveDays = leaveInfo.isSickLeave ? leaveInfo.days : 0;
+            const leaveDays = leaveInfo.isSickLeave ? 0 : leaveInfo.days;
+            const totalLeaveDays = leaveDays + sickLeaveDays;
+
+            // Actual worked days = raw work - all leave - absent
+            const actualWorkedDays = Math.max(0, rawWorkDays - totalLeaveDays - absentDays);
+
+            // Working hours = worked days * 8
+            const workingHours = actualWorkedDays * 8;
+
+            // OT hours
+            const ot1x = excelTimeToHours(record.ot1x);
+            const ot1_5x = excelTimeToHours(record.ot1_5x);
+            const ot2x = excelTimeToHours(record.ot2x);
+            const ot3x = excelTimeToHours(record.ot3x);
+            const totalOT = ot1x + ot1_5x + ot2x + ot3x;
 
             return {
                 date: parseEagleDate(record.date),
                 dateStr: record.date,
                 // Day values as decimals
-                workDays: actualWorkedDays,  // Net worked days after deductions
+                workDays: actualWorkedDays,
+                workingHours: workingHours,
                 leaveDays: leaveDays,
+                sickLeaveDays: sickLeaveDays,
                 absentDays: absentDays,
                 // Boolean flags for simple checks
                 worked: actualWorkedDays > 0,
                 leave: leaveDays > 0,
+                sickLeave: sickLeaveDays > 0,
                 absent: absentDays > 0,
                 // OT hours
-                ot1x: excelTimeToHours(record.ot1x),
-                ot1_5x: excelTimeToHours(record.ot1_5x),
-                ot2x: excelTimeToHours(record.ot2x),
-                ot3x: excelTimeToHours(record.ot3x)
+                ot1x,
+                ot1_5x,
+                ot2x,
+                ot3x,
+                totalOT,
+                // Total working hours = working hours + total OT
+                totalWorkingHours: workingHours + totalOT
             };
         });
 
-        // Calculate totals - sum decimal days
+        // Calculate totals
         const calculatedTotals = transformedRecords.reduce((acc, record) => ({
             daysWorked: acc.daysWorked + record.workDays,
+            workingHours: acc.workingHours + record.workingHours,
             leaveDays: acc.leaveDays + record.leaveDays,
+            sickLeaveDays: acc.sickLeaveDays + record.sickLeaveDays,
             absentDays: acc.absentDays + record.absentDays,
             ot1x: acc.ot1x + record.ot1x,
             ot1_5x: acc.ot1_5x + record.ot1_5x,
             ot2x: acc.ot2x + record.ot2x,
-            ot3x: acc.ot3x + record.ot3x
+            ot3x: acc.ot3x + record.ot3x,
+            totalOT: acc.totalOT + record.totalOT,
+            totalWorkingHours: acc.totalWorkingHours + record.totalWorkingHours
         }), {
             daysWorked: 0,
+            workingHours: 0,
             leaveDays: 0,
+            sickLeaveDays: 0,
             absentDays: 0,
             ot1x: 0,
             ot1_5x: 0,
             ot2x: 0,
-            ot3x: 0
+            ot3x: 0,
+            totalOT: 0,
+            totalWorkingHours: 0
         });
 
-        // Total hours is now days worked (for backward compatibility)
+        // Backward compatibility
         calculatedTotals.totalHours = calculatedTotals.daysWorked;
-
-        // Calculate total OT
-        calculatedTotals.totalOT = calculatedTotals.ot1x + calculatedTotals.ot1_5x + calculatedTotals.ot2x + calculatedTotals.ot3x;
 
         return {
             id: employee.id,
@@ -134,7 +159,7 @@ export function getChartData(employees) {
                 if (!dailyOT[dateKey]) {
                     dailyOT[dateKey] = { date: record.date, totalOT: 0 };
                 }
-                dailyOT[dateKey].totalOT += record.ot1x + record.ot1_5x + record.ot2x + record.ot3x;
+                dailyOT[dateKey].totalOT += record.totalOT;
             }
         });
     });

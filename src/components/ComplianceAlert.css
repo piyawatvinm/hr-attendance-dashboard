@@ -1,0 +1,175 @@
+.compliance-alert {
+    padding: 1.25rem 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.compliance-safe {
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.12), rgba(0, 200, 83, 0.04));
+    border: 1.5px solid rgba(0, 200, 83, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.compliance-warning {
+    background: linear-gradient(135deg, rgba(228, 0, 43, 0.12), rgba(228, 0, 43, 0.04));
+    border: 1.5px solid rgba(228, 0, 43, 0.4);
+}
+
+.compliance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.compliance-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.compliance-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.compliance-message {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.compliance-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.compliance-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.compliance-table-wrapper {
+    margin-top: 1rem;
+    overflow-x: auto;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.compliance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.compliance-table thead {
+    background: rgba(228, 0, 43, 0.15);
+}
+
+.compliance-table th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 2px solid rgba(228, 0, 43, 0.3);
+}
+
+.compliance-table th:nth-child(n+3) {
+    text-align: right;
+}
+
+.compliance-table td {
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.compliance-table .number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.compliance-table .over-limit {
+    color: #ff6b6b;
+    font-weight: 700;
+}
+
+.compliance-table .data-row:hover {
+    background: rgba(228, 0, 43, 0.08);
+}
+
+.compliance-table .subtotal {
+    background: rgba(228, 0, 43, 0.12);
+    font-weight: 700;
+    border-top: 2px solid rgba(228, 0, 43, 0.25);
+}
+
+.compliance-table .grand-total {
+    background: rgba(228, 0, 43, 0.2);
+    font-weight: 800;
+    border-top: 3px solid rgba(228, 0, 43, 0.4);
+    font-size: 0.9rem;
+}
+
+.compliance-table .category-cell {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .compliance-alert {
+        padding: 1rem;
+    }
+
+    .compliance-table {
+        font-size: 0.75rem;
+    }
+
+    .compliance-table th,
+    .compliance-table td {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .compliance-icon {
+        font-size: 1.25rem;
+    }
+
+    .compliance-message {
+        font-size: 0.85rem;
+    }
+}

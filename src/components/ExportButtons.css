@@ -1,114 +1,60 @@
-.export-buttons {
-    background: linear-gradient(180deg, var(--surface) 0%, rgba(26, 26, 26, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 0;
-    margin-top: 2rem;
-    overflow: hidden;
-    animation: fadeInUp 0.6s ease backwards;
-    animation-delay: 0.4s;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.export-buttons h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: white;
-    padding: 1.5rem 2rem 1rem;
+/* Excel Export Button - Prominent */
+.export-excel-btn {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-}
-
-.button-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    padding: 1rem 2rem 2rem;
-}
-
-.button-group .btn {
-    flex: 1;
-    min-width: 150px;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 0.6rem;
+    padding: 0.65rem 1.5rem;
+    background: linear-gradient(135deg, #00895a, #00c853);
+    border: 1px solid rgba(0, 200, 83, 0.4);
     border-radius: 12px;
-    padding: 1rem 1.5rem;
-    font-weight: 600;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
     position: relative;
+    z-index: 1;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 12px rgba(0, 200, 83, 0.25);
     overflow: hidden;
 }
 
-.button-group .btn::before {
+.export-excel-btn::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
     transition: left 0.5s ease;
+    z-index: -1;
 }
 
-.button-group .btn:hover::before {
+.export-excel-btn:hover::before {
     left: 100%;
 }
 
-.button-group .btn:hover {
-    background: linear-gradient(135deg, var(--kellogg-red), var(--kellogg-red-dark));
-    border-color: var(--kellogg-red);
+.export-excel-btn:hover {
+    background: linear-gradient(135deg, #00a86b, #00e676);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(228, 0, 43, 0.3);
+    box-shadow: 0 6px 24px rgba(0, 200, 83, 0.4);
 }
 
-.button-group .btn svg {
+.export-excel-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
+}
+
+.export-excel-btn svg {
     flex-shrink: 0;
-    transition: transform 0.3s ease;
-}
-
-.button-group .btn:hover svg {
-    transform: scale(1.1);
-}
-
-/* Individual button accents */
-.button-group .btn:nth-child(1):hover {
-    background: linear-gradient(135deg, #00C853, #00E676);
-    border-color: #00C853;
-    box-shadow: 0 8px 24px rgba(0, 200, 83, 0.3);
-}
-
-.button-group .btn:nth-child(2):hover {
-    background: linear-gradient(135deg, #2979FF, #00B0FF);
-    border-color: #2979FF;
-    box-shadow: 0 8px 24px rgba(41, 121, 255, 0.3);
-}
-
-.button-group .btn:nth-child(3):hover {
-    background: linear-gradient(135deg, #FF6D00, #FFAB00);
-    border-color: #FF6D00;
-    box-shadow: 0 8px 24px rgba(255, 109, 0, 0.3);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 @media (max-width: 640px) {
-    .button-group {
-        flex-direction: column;
-    }
-
-    .button-group .btn {
-        min-width: 100%;
+    .export-excel-btn {
+        padding: 0.55rem 1rem;
+        font-size: 0.8rem;
     }
 }

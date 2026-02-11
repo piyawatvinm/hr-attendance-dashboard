@@ -1,0 +1,118 @@
+.master-data-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(255, 171, 0, 0.15), rgba(255, 109, 0, 0.08));
+    border: 2px solid rgba(255, 171, 0, 0.4);
+    border-radius: 16px;
+    gap: 1.5rem;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 20px rgba(255, 171, 0, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 6px 30px rgba(255, 171, 0, 0.35);
+    }
+}
+
+.alert-content {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex: 1;
+}
+
+.alert-icon {
+    font-size: 2.5rem;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.alert-text h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #FFAB00;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.alert-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+}
+
+.alert-text strong {
+    color: #FFD54F;
+    font-weight: 700;
+}
+
+.alert-upload-btn {
+    padding: 0.9rem 1.75rem;
+    background: linear-gradient(135deg, #FFAB00, #FF9800);
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(255, 171, 0, 0.3);
+    white-space: nowrap;
+}
+
+.alert-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(255, 171, 0, 0.5);
+    background: linear-gradient(135deg, #FFD54F, #FFAB00);
+}
+
+.alert-upload-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .master-data-alert {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.25rem;
+    }
+
+    .alert-icon {
+        font-size: 2rem;
+    }
+
+    .alert-text h3 {
+        font-size: 0.95rem;
+    }
+
+    .alert-text p {
+        font-size: 0.8rem;
+    }
+
+    .alert-upload-btn {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+    }
+}

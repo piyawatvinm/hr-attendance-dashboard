@@ -5,9 +5,6 @@ function SummaryTable({ summaryRows }) {
     if (!summaryRows || summaryRows.length === 0) {
         return (
             <div className="summary-table-container">
-                <div className="table-header">
-                    <h2>📊 Summary by Department</h2>
-                </div>
                 <p className="no-data">Upload Master Data file to see summary by department</p>
             </div>
         );
@@ -25,7 +22,6 @@ function SummaryTable({ summaryRows }) {
 
     return (
         <div className="summary-table-container">
-            <h2>📊 Summary by Department</h2>
             <div className="table-wrapper">
                 <table className="summary-table">
                     <thead>

@@ -5,6 +5,7 @@ import { parseExcelFile, extractStructuredData } from './utils/excelParser';
 import { transformEmployeeData, calculateSummary, getChartData } from './utils/dataTransformer';
 import { parseMasterDataFile } from './utils/masterDataParser';
 import { mergeEmployeeData, createSummaryTable } from './utils/dataMerger';
+import { getDateRange, getCategoryStats, getComplianceStats, countEmployeesOver60 } from './utils/dashboardUtils';
 import './App.css';
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
 
             // Calculate summary
             const summary = calculateSummary(transformedEmployees);
+            summary.employeesOver60 = countEmployeesOver60(transformedEmployees);
 
             // Get chart data
             const chartData = getChartData(transformedEmployees);
@@ -45,11 +47,19 @@ function App() {
             // Create summary table
             const summaryRows = masterData ? createSummaryTable(transformedEmployees) : [];
 
+            // Get dashboard stats
+            const dateRange = getDateRange(transformedEmployees);
+            const categoryStats = getCategoryStats(transformedEmployees);
+            const complianceStats = getComplianceStats(transformedEmployees);
+
             setData({
                 employees: transformedEmployees,
                 summary,
                 chartData,
-                summaryRows
+                summaryRows,
+                dateRange,
+                categoryStats,
+                complianceStats
             });
         } catch (err) {
             console.error('Error processing file:', err);
@@ -69,10 +79,18 @@ function App() {
             if (data) {
                 const mergedEmployees = mergeEmployeeData(data.employees, parsedMasterData);
                 const summaryRows = createSummaryTable(mergedEmployees);
+                const summary = calculateSummary(mergedEmployees);
+                summary.employeesOver60 = countEmployeesOver60(mergedEmployees);
+                const categoryStats = getCategoryStats(mergedEmployees);
+                const complianceStats = getComplianceStats(mergedEmployees);
+
                 setData({
                     ...data,
                     employees: mergedEmployees,
-                    summaryRows
+                    summary,
+                    summaryRows,
+                    categoryStats,
+                    complianceStats
                 });
             }
 
@@ -146,17 +164,6 @@ function App() {
                             >
                                 ← Upload New File
                             </button>
-
-                            {!masterData && (
-                                <div className="inline-upload">
-                                    <span>Add Master Data for Department Summary:</span>
-                                    <FileUpload
-                                        onFileProcessed={handleMasterDataUpload}
-                                        label="Upload Master Data"
-                                        compact
-                                    />
-                                </div>
-                            )}
                         </div>
 
                         <Dashboard
@@ -164,6 +171,25 @@ function App() {
                             summary={data.summary}
                             chartData={data.chartData}
                             summaryRows={data.summaryRows}
+                            dateRange={data.dateRange}
+                            categoryStats={data.categoryStats}
+                            complianceStats={data.complianceStats}
+                            onMasterDataUpload={!masterData ? () => {
+                                const input = document.createElement('input');
+                                input.type = 'file';
+                                input.accept = '.xlsx,.xls';
+                                input.onchange = async (e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        try {
+                                            await handleMasterDataUpload(file);
+                                        } catch (err) {
+                                            console.error('Failed to upload master data:', err);
+                                        }
+                                    }
+                                };
+                                input.click();
+                            } : null}
                         />
                     </>
                 )}
