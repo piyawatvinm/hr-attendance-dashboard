@@ -17,6 +17,7 @@ export default function Dashboard({
     dateRange,
     categoryStats,
     complianceStats,
+    fileFormat,
     onMasterDataUpload
 }) {
     const [showEmployeeDetails, setShowEmployeeDetails] = useState(true);
@@ -41,7 +42,7 @@ export default function Dashboard({
 
             {/* Master Data Alert */}
             {!hasMasterData && onMasterDataUpload && (
-                <MasterDataAlert onUpload={onMasterDataUpload} />
+                <MasterDataAlert onUpload={onMasterDataUpload} isPunchFormat={fileFormat === 'punch'} />
             )}
 
             {/* Section: Key Metrics */}

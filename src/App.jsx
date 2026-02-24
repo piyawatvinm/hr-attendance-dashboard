@@ -6,11 +6,13 @@ import { transformEmployeeData, calculateSummary, getChartData } from './utils/d
 import { parseMasterDataFile } from './utils/masterDataParser';
 import { mergeEmployeeData, createSummaryTable } from './utils/dataMerger';
 import { getDateRange, getCategoryStats, getComplianceStats, countEmployeesOver60 } from './utils/dashboardUtils';
+import { detectAttendanceFormat, parsePunchFile, recalculatePunchOT } from './utils/punchParser';
 import './App.css';
 
 function App() {
     const [data, setData] = useState(null);
     const [masterData, setMasterData] = useState(null);
+    const [fileFormat, setFileFormat] = useState(null); // 'punch' | 'eagle'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -19,22 +21,29 @@ function App() {
         setError(null);
 
         try {
-            // Parse Excel file
-            const rawData = await parseExcelFile(file);
+            // Auto-detect format
+            const format = await detectAttendanceFormat(file);
+            setFileFormat(format);
 
-            // Extract structured data
-            const employees = extractStructuredData(rawData);
+            let transformedEmployees;
 
-            if (employees.length === 0) {
-                throw new Error('No employee data found in the file');
+            if (format === 'punch') {
+                // Parse punch log format
+                transformedEmployees = await parsePunchFile(file);
+            } else {
+                // Parse Eagle System format
+                const rawData = await parseExcelFile(file);
+                const employees = extractStructuredData(rawData);
+                if (employees.length === 0) throw new Error('No employee data found in the file');
+                transformedEmployees = transformEmployeeData(employees);
             }
-
-            // Transform data
-            let transformedEmployees = transformEmployeeData(employees);
 
             // If we have master data, merge it
             if (masterData) {
                 transformedEmployees = mergeEmployeeData(transformedEmployees, masterData);
+                if (format === 'punch') {
+                    transformedEmployees = recalculatePunchOT(transformedEmployees);
+                }
             }
 
             // Calculate summary
@@ -77,7 +86,11 @@ function App() {
 
             // If we already have attendance data, re-process with master data
             if (data) {
-                const mergedEmployees = mergeEmployeeData(data.employees, parsedMasterData);
+                let mergedEmployees = mergeEmployeeData(data.employees, parsedMasterData);
+                // Recalculate OT using correct plant rules if punch format
+                if (fileFormat === 'punch') {
+                    mergedEmployees = recalculatePunchOT(mergedEmployees);
+                }
                 const summaryRows = createSummaryTable(mergedEmployees);
                 const summary = calculateSummary(mergedEmployees);
                 summary.employeesOver60 = countEmployeesOver60(mergedEmployees);
@@ -174,6 +187,7 @@ function App() {
                             dateRange={data.dateRange}
                             categoryStats={data.categoryStats}
                             complianceStats={data.complianceStats}
+                            fileFormat={fileFormat}
                             onMasterDataUpload={!masterData ? () => {
                                 const input = document.createElement('input');
                                 input.type = 'file';

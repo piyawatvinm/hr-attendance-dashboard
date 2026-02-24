@@ -36,16 +36,18 @@ export function parseMasterDataFile(file) {
 
 /**
  * Extract master data from rows
- * Returns a map of employeeId -> { plantDivision, employeeType }
+ * Returns a map of employeeId -> { name, position, department, plantDivision, employeeType, team, costCenter }
  */
 function extractMasterData(rows) {
     const masterData = {};
 
     // Find header row (look for "Employee ID" in column B)
+    let headerRow = null;
     let dataStartRow = 0;
     for (let i = 0; i < Math.min(10, rows.length); i++) {
         const row = rows[i];
         if (row && row[1] && String(row[1]).toLowerCase().includes('employee id')) {
+            headerRow = row.map(h => h ? String(h).toLowerCase().trim() : '');
             dataStartRow = i + 1;
             break;
         }
@@ -56,32 +58,50 @@ function extractMasterData(rows) {
         dataStartRow = 3;
     }
 
+    // Auto-detect column indices from header
+    let colName = 2;        // default col C
+    let colPosition = 3;    // default col D
+    let colDepartment = 4;  // default col E
+    let colPlant = 9;       // default col J
+    let colEmpType = 10;    // default col K
+    let colTeam = 11;       // default col L
+    let colCostCenter = 18; // default col S
+
+    if (headerRow) {
+        headerRow.forEach((h, idx) => {
+            if (!h) return;
+            if (h.includes('name') && !h.includes('cost') && !h.includes('plant')) colName = idx;
+            if (h.includes('position') || h.includes('job title')) colPosition = idx;
+            if (h.includes('department') || h.includes('dept')) colDepartment = idx;
+            if (h.includes('plant') || h.includes('division')) colPlant = idx;
+            if (h.includes('employee type') || h.includes('emp type')) colEmpType = idx;
+            if (h.includes('team')) colTeam = idx;
+            if (h.includes('cost center')) colCostCenter = idx;
+        });
+    }
+
     console.log('Master data starting from row:', dataStartRow);
+    console.log('Column mapping:', { colName, colPosition, colDepartment, colPlant, colEmpType, colTeam, colCostCenter });
 
     // Parse each data row
     for (let i = dataStartRow; i < rows.length; i++) {
         const row = rows[i];
         if (!row || row.length === 0) continue;
 
-        // Column indices: B=1, J=9, K=10, L=11 (Team), S=18 (Cost Center)
         const employeeId = row[1];
-        const plantDivision = row[9];
-        const employeeType = row[10];
-        const team = row[11];
-        const costCenter = row[18];
-
-        // Skip if no employee ID
         if (!employeeId) continue;
 
-        // Clean and store
         const id = String(employeeId).trim();
         if (id && id !== '' && !isNaN(id.charAt(0))) {
             masterData[id] = {
                 employeeId: id,
-                plantDivision: plantDivision ? String(plantDivision).trim() : '',
-                employeeType: employeeType ? String(employeeType).trim() : '',
-                team: team ? String(team).trim() : '',
-                costCenter: costCenter ? String(costCenter).trim() : ''
+                name: row[colName] ? String(row[colName]).trim() : '',
+                position: row[colPosition] ? String(row[colPosition]).trim() : '',
+                department: row[colDepartment] ? String(row[colDepartment]).trim() : '',
+                plantDivision: row[colPlant] ? String(row[colPlant]).trim() : '',
+                employeeType: row[colEmpType] ? String(row[colEmpType]).trim() : '',
+                team: row[colTeam] ? String(row[colTeam]).trim() : '',
+                costCenter: row[colCostCenter] ? String(row[colCostCenter]).trim() : ''
             };
         }
     }

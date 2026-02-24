@@ -20,6 +20,9 @@ export function mergeEmployeeData(employees, masterData) {
             const category = getEmployeeCategory(master.plantDivision, master.employeeType);
             return {
                 ...emp,
+                name: master.name || emp.name || '',
+                position: master.position || emp.position || '',
+                department: master.department || emp.department || '',
                 plantDivision: master.plantDivision,
                 employeeType: master.employeeType,
                 team: master.team,
