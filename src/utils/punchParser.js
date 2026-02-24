@@ -258,24 +258,33 @@ function getShiftSchedule(plant, dayType, shiftType) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// OT CALCULATION (Frame-Based)
+// OT CALCULATION (All-or-Nothing per Period)
 // ─────────────────────────────────────────────────────────────────────────────
+// Each OT period is a single block. Employee must cover the ENTIRE period:
+//   OT Before: clockIn  <= period START → full period duration as OT
+//   OT After:  clockOut >= period END   → full period duration as OT
+// OT hours = exact period duration (e.g. 220 min = 3h 40m)
 
 function calculateOT(clockInMin, clockOutMin, schedule, dayType) {
     const { otBefore, normal, otAfter } = schedule;
     const isWeekend = dayType === 'fri-sun';
     let normalHours = 0, otWeekdayMin = 0, otWeekendMin = 0;
 
+    // Normal hours
     if (normal && clockInMin < normal[1] && clockOutMin > normal[0]) {
         normalHours = (normal[1] - normal[0]) / 60;
     }
-    if (otBefore && clockInMin <= otBefore[1]) {
-        const m = otBefore[1] - otBefore[0];
-        isWeekend ? (otWeekendMin += m) : (otWeekdayMin += m);
+
+    // OT Before: must clock in ≤ period START to get full period
+    if (otBefore && clockInMin <= otBefore[0]) {
+        const periodMin = otBefore[1] - otBefore[0];
+        isWeekend ? (otWeekendMin += periodMin) : (otWeekdayMin += periodMin);
     }
-    if (otAfter && clockOutMin >= otAfter[0]) {
-        const m = otAfter[1] - otAfter[0];
-        isWeekend ? (otWeekendMin += m) : (otWeekdayMin += m);
+
+    // OT After: must clock out ≥ period END to get full period
+    if (otAfter && clockOutMin >= otAfter[1]) {
+        const periodMin = otAfter[1] - otAfter[0];
+        isWeekend ? (otWeekendMin += periodMin) : (otWeekdayMin += periodMin);
     }
 
     return { normalHours, ot1_5x: otWeekdayMin / 60, ot3x: otWeekendMin / 60 };
