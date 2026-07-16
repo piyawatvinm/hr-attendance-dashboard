@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 import './CategoryBreakdown.css';
 
 export default function CategoryBreakdown({ categoryStats }) {
@@ -91,8 +91,12 @@ export default function CategoryBreakdown({ categoryStats }) {
                             iconType="circle"
                             iconSize={7}
                         />
-                        <Bar dataKey="Working Hrs" stackId="a" fill="url(#workingHoursGrad)" name="Working Hours" maxBarSize={28} />
-                        <Bar dataKey="OT" stackId="a" fill="url(#otCategoryGrad)" name="Overtime" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                        <Bar dataKey="Working Hrs" stackId="a" fill="url(#workingHoursGrad)" name="Working Hours" maxBarSize={28}>
+                            <LabelList dataKey="Working Hrs" position="center" fill="#fff" fontSize={9} fontWeight={700} formatter={(v) => v > 15 ? Math.round(v).toLocaleString() : ''} />
+                        </Bar>
+                        <Bar dataKey="OT" stackId="a" fill="url(#otCategoryGrad)" name="Overtime" radius={[4, 4, 0, 0]} maxBarSize={28}>
+                            <LabelList dataKey="OT" position="top" fill="var(--text-secondary)" fontSize={9} fontWeight={700} offset={4} formatter={(v) => v > 0 ? Math.round(v).toLocaleString() : ''} />
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </div>

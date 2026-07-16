@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 
 export default function OTByEmployee({ data }) {
     // Take top 10 employees by OT
@@ -72,7 +72,9 @@ export default function OTByEmployee({ data }) {
                     <Bar dataKey="ot1x" stackId="a" fill="url(#ot1xGrad)" name="1x Rate" radius={[0, 0, 0, 0]} maxBarSize={32} />
                     <Bar dataKey="ot1_5x" stackId="a" fill="url(#ot1_5xGrad)" name="1.5x Rate" radius={[0, 0, 0, 0]} maxBarSize={32} />
                     <Bar dataKey="ot2x" stackId="a" fill="url(#ot2xGrad)" name="2x Rate" radius={[0, 0, 0, 0]} maxBarSize={32} />
-                    <Bar dataKey="ot3x" stackId="a" fill="url(#ot3xGrad)" name="3x Rate" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                    <Bar dataKey="ot3x" stackId="a" fill="url(#ot3xGrad)" name="3x Rate" radius={[4, 4, 0, 0]} maxBarSize={32}>
+                        <LabelList dataKey="ot" position="top" fill="var(--text-secondary)" fontSize={10} fontWeight={700} offset={6} formatter={(v) => v > 0 ? v.toFixed(1) + ' hrs' : ''} />
+                    </Bar>
                 </BarChart>
             </ResponsiveContainer>
         </div>

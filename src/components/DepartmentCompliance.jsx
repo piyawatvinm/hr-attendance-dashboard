@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Line, LineChart, Cell, AreaChart, Area } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Line, LineChart, Cell, AreaChart, Area, LabelList } from 'recharts';
 import './DepartmentCompliance.css';
 
 export default function DepartmentCompliance({ stats, employees }) {
@@ -463,8 +463,12 @@ export default function DepartmentCompliance({ stats, employees }) {
                                             labelFormatter={(label, items) => items[0]?.payload?.fullName || label}
                                         />
                                         <Legend wrapperStyle={{ fontSize: '11px', marginTop: '5px' }} />
-                                        <Bar yAxisId="left" dataKey="Total Headcount" fill="url(#headcountGrad)" name="Total Headcount" radius={[6, 6, 0, 0]} barSize={18} />
-                                        <Bar yAxisId="right" dataKey="Exceeded 60 Hrs" fill="url(#violatorGrad)" name="Exceeded 60 Hrs" radius={[6, 6, 0, 0]} barSize={18} />
+                                        <Bar yAxisId="left" dataKey="Total Headcount" fill="url(#headcountGrad)" name="Total Headcount" radius={[6, 6, 0, 0]} barSize={18}>
+                                            <LabelList dataKey="Total Headcount" position="top" fill="var(--text-secondary)" fontSize={9} fontWeight={700} offset={4} />
+                                        </Bar>
+                                        <Bar yAxisId="right" dataKey="Exceeded 60 Hrs" fill="url(#violatorGrad)" name="Exceeded 60 Hrs" radius={[6, 6, 0, 0]} barSize={18}>
+                                            <LabelList dataKey="Exceeded 60 Hrs" position="top" fill="var(--kellogg-red)" fontSize={9} fontWeight={700} offset={4} formatter={(v) => v > 0 ? v : ''} />
+                                        </Bar>
                                     </BarChart>
                                 ) : (
                                     <ComposedChart 
@@ -523,7 +527,9 @@ export default function DepartmentCompliance({ stats, employees }) {
                                             labelFormatter={(label, items) => items[0]?.payload?.fullName || label}
                                         />
                                         <Legend wrapperStyle={{ fontSize: '11px', marginTop: '5px' }} />
-                                        <Bar yAxisId="left" dataKey="Total Hours" fill="url(#hoursGrad)" name="Total Hours" radius={[6, 6, 0, 0]} barSize={20} />
+                                        <Bar yAxisId="left" dataKey="Total Hours" fill="url(#hoursGrad)" name="Total Hours" radius={[6, 6, 0, 0]} barSize={20}>
+                                            <LabelList dataKey="Total Hours" position="top" fill="var(--text-secondary)" fontSize={9} fontWeight={700} offset={4} formatter={(v) => v > 0 ? Math.round(v).toLocaleString() : ''} />
+                                        </Bar>
                                         <Area yAxisId="right" type="monotone" dataKey="Excess Hours (>60)" stroke="#E40029" strokeWidth={3} fill="url(#excessHoursAreaGrad)" activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff' }} name="Excess Hours (>60)" />
                                     </ComposedChart>
                                 )}
@@ -594,6 +600,7 @@ export default function DepartmentCompliance({ stats, employees }) {
                                                         const opacity = selectedTeam ? (isSelected ? 1.0 : 0.25) : 0.95;
                                                         return <Cell key={`cell-${index}`} fill={baseColor} fillOpacity={opacity} />;
                                                     })}
+                                                    <LabelList dataKey="ot" position="top" fill="var(--text-secondary)" fontSize={10} fontWeight={700} offset={4} formatter={(v) => v > 0 ? v.toFixed(1) : ''} />
                                                 </Bar>
                                             </BarChart>
                                         </ResponsiveContainer>
@@ -639,6 +646,7 @@ export default function DepartmentCompliance({ stats, employees }) {
                                                     const opacity = selectedDay ? (isSelected ? 1.0 : 0.25) : 0.9;
                                                     return <Cell key={`cell-${index}`} fill="url(#dayOTGrad)" fillOpacity={opacity} />;
                                                 })}
+                                                <LabelList dataKey="ot" position="top" fill="var(--text-secondary)" fontSize={10} fontWeight={700} offset={4} formatter={(v) => v > 0 ? v.toFixed(1) : ''} />
                                             </Bar>
                                         </BarChart>
                                     </ResponsiveContainer>
