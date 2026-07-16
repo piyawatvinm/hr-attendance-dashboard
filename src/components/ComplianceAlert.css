@@ -18,16 +18,24 @@
 }
 
 .compliance-safe {
-    background: linear-gradient(135deg, rgba(0, 200, 83, 0.12), rgba(0, 200, 83, 0.04));
-    border: 1.5px solid rgba(0, 200, 83, 0.3);
+    background: rgba(71, 85, 105, 0.04);
+    border: 1px solid rgba(71, 85, 105, 0.12);
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
+.compliance-safe .compliance-message {
+    color: var(--text-primary);
+}
+
 .compliance-warning {
-    background: linear-gradient(135deg, rgba(228, 0, 43, 0.12), rgba(228, 0, 43, 0.04));
-    border: 1.5px solid rgba(228, 0, 43, 0.4);
+    background: rgba(228, 0, 43, 0.04);
+    border: 1px solid rgba(228, 0, 43, 0.15);
+}
+
+.compliance-warning .compliance-message {
+    color: var(--kellogg-red-dark);
 }
 
 .compliance-header {
@@ -46,36 +54,37 @@
 
 .compliance-icon {
     font-size: 1.5rem;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.03));
 }
 
 .compliance-message {
     font-size: 0.95rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.95);
 }
 
 .compliance-toggle {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.7);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     padding: 0.4rem 0.8rem;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .compliance-toggle:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: white;
+    background: var(--surface-elevated);
+    color: var(--text-primary);
 }
 
 .compliance-table-wrapper {
     margin-top: 1rem;
     overflow-x: auto;
     border-radius: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-color);
     animation: fadeIn 0.3s ease;
 }
 
@@ -96,7 +105,7 @@
 }
 
 .compliance-table thead {
-    background: rgba(228, 0, 43, 0.15);
+    background: var(--surface-elevated);
 }
 
 .compliance-table th {
@@ -106,8 +115,12 @@
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.5px;
-    color: rgba(255, 255, 255, 0.9);
-    border-bottom: 2px solid rgba(228, 0, 43, 0.3);
+    color: var(--kellogg-red);
+    border-bottom: 2px solid rgba(228, 0, 43, 0.12);
+}
+
+.compliance-table th:not(:last-child) {
+    border-right: 1px solid var(--border-color);
 }
 
 .compliance-table th:nth-child(n+3) {
@@ -116,8 +129,8 @@
 
 .compliance-table td {
     padding: 0.75rem 1rem;
-    color: rgba(255, 255, 255, 0.85);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .compliance-table .number {
@@ -126,24 +139,24 @@
 }
 
 .compliance-table .over-limit {
-    color: #ff6b6b;
+    color: var(--kellogg-red);
     font-weight: 700;
 }
 
 .compliance-table .data-row:hover {
-    background: rgba(228, 0, 43, 0.08);
+    background: rgba(228, 0, 43, 0.04);
 }
 
 .compliance-table .subtotal {
-    background: rgba(228, 0, 43, 0.12);
+    background: rgba(228, 0, 43, 0.03);
     font-weight: 700;
-    border-top: 2px solid rgba(228, 0, 43, 0.25);
+    border-top: 1px solid rgba(228, 0, 43, 0.08);
 }
 
 .compliance-table .grand-total {
-    background: rgba(228, 0, 43, 0.2);
+    background: rgba(228, 0, 43, 0.06);
     font-weight: 800;
-    border-top: 3px solid rgba(228, 0, 43, 0.4);
+    border-top: 2px solid var(--kellogg-red);
     font-size: 0.9rem;
 }
 

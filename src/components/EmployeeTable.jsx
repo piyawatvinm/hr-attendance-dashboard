@@ -25,7 +25,8 @@ export default function EmployeeTable({ employees }) {
         emp.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (emp.plantDivision && emp.plantDivision.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (emp.employeeType && emp.employeeType.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (emp.category && emp.category.toLowerCase().includes(searchTerm.toLowerCase()))
+        (emp.category && emp.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (emp.team && emp.team.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const sortedEmployees = [...filteredEmployees].sort((a, b) => {
@@ -71,6 +72,10 @@ export default function EmployeeTable({ employees }) {
             case 'costCenter':
                 aVal = a.costCenter || '';
                 bVal = b.costCenter || '';
+                break;
+            case 'team':
+                aVal = a.team || '';
+                bVal = b.team || '';
                 break;
             default:
                 aVal = a.totals.totalOT;
@@ -128,6 +133,9 @@ export default function EmployeeTable({ employees }) {
                             <th onClick={() => handleSort('costCenter')} className="sortable">
                                 Cost Center {sortField === 'costCenter' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
+                            <th onClick={() => handleSort('team')} className="sortable">
+                                Team {sortField === 'team' && (sortDirection === 'asc' ? '↑' : '↓')}
+                            </th>
                             <th onClick={() => handleSort('totalHours')} className="sortable">
                                 Days Worked {sortField === 'totalHours' && (sortDirection === 'asc' ? '↑' : '↓')}
                             </th>
@@ -156,6 +164,7 @@ export default function EmployeeTable({ employees }) {
                                 <td>{emp.employeeType || '-'}</td>
                                 <td>{emp.category || '-'}</td>
                                 <td>{emp.costCenter || '-'}</td>
+                                <td>{emp.team || '-'}</td>
                                 <td>{emp.totals.totalHours}</td>
                                 <td className="highlight">{formatHours(emp.totals.totalOT)}</td>
                                 <td>{formatHours(emp.totals.ot1x)}</td>

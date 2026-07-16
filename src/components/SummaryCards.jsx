@@ -36,45 +36,45 @@ export default function SummaryCards({ summary }) {
             value: summary.totalHours,
             displayValue: summary.totalHours,
             icon: '📅',
-            gradient: 'linear-gradient(135deg, #00C853, #00E676)',
-            bgGradient: 'linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 230, 118, 0.05))',
-            iconBg: 'rgba(0, 200, 83, 0.2)'
+            gradient: 'linear-gradient(135deg, #475569, #64748B)',
+            bgGradient: 'linear-gradient(135deg, rgba(71, 85, 105, 0.06), rgba(100, 116, 139, 0.02))',
+            iconBg: 'rgba(71, 85, 105, 0.1)'
         },
         {
             title: 'Total OT Hours',
             value: summary.totalOT,
             displayValue: formatHours(summary.totalOT),
             icon: '⚡',
-            gradient: 'linear-gradient(135deg, #FF6D00, #FFAB00)',
-            bgGradient: 'linear-gradient(135deg, rgba(255, 109, 0, 0.15), rgba(255, 171, 0, 0.05))',
-            iconBg: 'rgba(255, 109, 0, 0.2)'
+            gradient: 'linear-gradient(135deg, #991B1B, #B91C1C)',
+            bgGradient: 'linear-gradient(135deg, rgba(153, 27, 27, 0.06), rgba(185, 28, 28, 0.02))',
+            iconBg: 'rgba(153, 27, 27, 0.1)'
         },
         {
             title: 'Total Employees',
             value: summary.totalEmployees,
             displayValue: summary.totalEmployees,
             icon: '👥',
-            gradient: 'linear-gradient(135deg, #2979FF, #00B0FF)',
-            bgGradient: 'linear-gradient(135deg, rgba(41, 121, 255, 0.15), rgba(0, 176, 255, 0.05))',
-            iconBg: 'rgba(41, 121, 255, 0.2)'
+            gradient: 'linear-gradient(135deg, #1E293B, #334155)',
+            bgGradient: 'linear-gradient(135deg, rgba(30, 41, 59, 0.06), rgba(51, 65, 85, 0.02))',
+            iconBg: 'rgba(30, 41, 59, 0.1)'
         },
         {
             title: 'Employees Over 60 hrs',
             value: summary.employeesOver60 || 0,
             displayValue: summary.employeesOver60 || 0,
             icon: '⚠️',
-            gradient: 'linear-gradient(135deg, #E40029, #FF6B81)',
-            bgGradient: 'linear-gradient(135deg, rgba(228, 0, 41, 0.15), rgba(255, 107, 129, 0.05))',
-            iconBg: 'rgba(228, 0, 41, 0.2)'
+            gradient: 'linear-gradient(135deg, #E40029, #FF3B5F)',
+            bgGradient: 'linear-gradient(135deg, rgba(228, 0, 41, 0.06), rgba(255, 59, 95, 0.02))',
+            iconBg: 'rgba(228, 0, 41, 0.1)'
         },
         {
             title: 'Avg OT / Employee',
             value: summary.avgOTPerEmployee,
             displayValue: formatHours(summary.avgOTPerEmployee),
             icon: '📊',
-            gradient: 'linear-gradient(135deg, #AA00FF, #E040FB)',
-            bgGradient: 'linear-gradient(135deg, rgba(170, 0, 255, 0.15), rgba(224, 64, 251, 0.05))',
-            iconBg: 'rgba(170, 0, 255, 0.2)'
+            gradient: 'linear-gradient(135deg, #64748B, #94A3B8)',
+            bgGradient: 'linear-gradient(135deg, rgba(100, 116, 139, 0.06), rgba(148, 163, 184, 0.02))',
+            iconBg: 'rgba(100, 116, 139, 0.1)'
         }
     ];
 

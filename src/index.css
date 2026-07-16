@@ -1,31 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 :root {
   /* Kellogg Color Palette */
   --kellogg-red: #E4002B;
   --kellogg-red-dark: #B8001F;
   --kellogg-red-light: #FF1744;
   
-  /* Dark Theme */
-  --background: #0F0F0F;
-  --surface: #1A1A1A;
-  --surface-elevated: #242424;
-  --surface-glass: rgba(255, 255, 255, 0.05);
-  --surface-glass-hover: rgba(255, 255, 255, 0.08);
+  /* Light Theme - Clean, Soft & Professional */
+  --background: #F4F6FA;
+  --surface: #FFFFFF;
+  --surface-elevated: #F8FAFC;
+  --surface-glass: rgba(255, 255, 255, 0.85);
+  --surface-glass-hover: rgba(255, 255, 255, 0.95);
   
   /* Text Colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: #B0B0B0;
-  --text-tertiary: #707070;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-tertiary: #64748B;
   
   /* Accent Colors */
-  --accent-green: #4CAF50;
-  --accent-orange: #FF9800;
-  --accent-purple: #9C27B0;
+  --accent-green: #10B981;
+  --accent-orange: #F59E0B;
+  --accent-purple: #8B5CF6;
   
   /* Borders & Shadows */
-  --border-color: rgba(255, 255, 255, 0.1);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05), 0 1px 4px rgba(15, 23, 42, 0.02);
+  --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03);
   
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -54,30 +56,31 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-weight: 850;
   line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
 }
 
 h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.25rem;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 1.75rem;
 }
 
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
 }
 
 /* Buttons */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-normal);
   font-family: inherit;
@@ -89,12 +92,12 @@ h3 {
 .btn-primary {
   background: linear-gradient(135deg, var(--kellogg-red), var(--kellogg-red-dark));
   color: white;
-  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.3);
+  box-shadow: 0 4px 12px rgba(228, 0, 43, 0.25);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(228, 0, 43, 0.4);
+  box-shadow: 0 6px 20px rgba(228, 0, 43, 0.35);
 }
 
 .btn-secondary {
@@ -111,7 +114,7 @@ h3 {
 /* Cards */
 .card {
   background: var(--surface);
-  border-radius: 12px;
+  border-radius: 20px;
   padding: 1.5rem;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);

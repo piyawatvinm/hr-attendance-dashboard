@@ -4,8 +4,8 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.65rem 1.5rem;
-    background: linear-gradient(135deg, #00895a, #00c853);
-    border: 1px solid rgba(0, 200, 83, 0.4);
+    background: linear-gradient(135deg, #15803d, #16a34a);
+    border: 1px solid rgba(22, 163, 74, 0.3);
     border-radius: 12px;
     color: white;
     font-size: 0.9rem;
@@ -16,7 +16,7 @@
     position: relative;
     z-index: 1;
     letter-spacing: 0.3px;
-    box-shadow: 0 2px 12px rgba(0, 200, 83, 0.25);
+    box-shadow: 0 2px 12px rgba(22, 163, 74, 0.15);
     overflow: hidden;
 }
 
@@ -37,14 +37,14 @@
 }
 
 .export-excel-btn:hover {
-    background: linear-gradient(135deg, #00a86b, #00e676);
+    background: linear-gradient(135deg, #16a34a, #22c55e);
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 200, 83, 0.4);
+    box-shadow: 0 6px 24px rgba(22, 163, 74, 0.3);
 }
 
 .export-excel-btn:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0, 200, 83, 0.3);
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
 }
 
 .export-excel-btn svg {

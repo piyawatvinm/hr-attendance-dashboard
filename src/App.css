@@ -114,24 +114,25 @@
 }
 
 .upload-box {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 2rem;
+    box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
 }
 
 .upload-box:hover {
-    border-color: rgba(228, 0, 43, 0.3);
+    border-color: var(--kellogg-red-light);
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-lg);
 }
 
 .upload-box h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1.1rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-primary);
 }
 
 .upload-box .upload-hint {
@@ -141,7 +142,7 @@
 }
 
 .upload-box .success-message {
-    color: #00E676;
+    color: var(--accent-green);
     font-size: 0.9rem;
     margin-top: 1rem;
     display: flex;
@@ -161,25 +162,24 @@
 
 .feature {
     padding: 2rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
+    box-shadow: var(--shadow-sm);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feature:hover {
     transform: translateY(-8px);
-    border-color: rgba(228, 0, 43, 0.4);
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(228, 0, 43, 0.1);
+    border-color: var(--kellogg-red-light);
+    box-shadow: var(--shadow-lg);
 }
 
 .feature-icon {
     font-size: 3rem;
     display: block;
     margin-bottom: 1.25rem;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
     transition: transform 0.3s ease;
 }
 
@@ -191,6 +191,7 @@
     font-size: 1.15rem;
     margin: 0 0 0.5rem 0;
     font-weight: 700;
+    color: var(--text-primary);
 }
 
 .feature p {
@@ -214,16 +215,17 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    background: var(--surface);
     padding: 0.75rem 1.25rem;
     border-radius: 12px;
-    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border: 1px dashed var(--border-color);
+    box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
 }
 
 .inline-upload:hover {
     border-color: var(--kellogg-red);
-    background: rgba(228, 0, 43, 0.05);
+    background: rgba(228, 0, 43, 0.03);
 }
 
 .inline-upload span {

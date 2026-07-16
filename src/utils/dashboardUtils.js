@@ -248,3 +248,47 @@ export function countEmployeesOver60(employees) {
         return (workingHrs + totalOT) > 60;
     }).length;
 }
+
+/**
+ * Get compliance and headcount stats grouped by department
+ */
+export function getDepartmentComplianceStats(employees) {
+    const departments = {};
+
+    employees.forEach(emp => {
+        const dept = emp.department || 'No Department';
+        if (!departments[dept]) {
+            departments[dept] = {
+                department: dept,
+                headcount: 0,
+                totalHours: 0,
+                violatorsCount: 0,
+                excessHours: 0
+            };
+        }
+
+        const d = departments[dept];
+        d.headcount++;
+
+        const daysWorked = emp.totals.daysWorked || 0;
+        const workingHrs = daysWorked * 8;
+        const totalOT = emp.totals.totalOT || 0;
+        const totalHrs = workingHrs + totalOT;
+
+        d.totalHours += totalHrs;
+
+        if (totalHrs > 60) {
+            d.violatorsCount++;
+            d.excessHours += (totalHrs - 60);
+        }
+    });
+
+    // Round total hours and excess hours
+    Object.values(departments).forEach(d => {
+        d.totalHours = Math.round(d.totalHours * 100) / 100;
+        d.excessHours = Math.round(d.excessHours * 100) / 100;
+    });
+
+    return Object.values(departments).sort((a, b) => b.violatorsCount - a.violatorsCount || b.excessHours - a.excessHours);
+}
+

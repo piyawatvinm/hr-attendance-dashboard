@@ -1,11 +1,11 @@
 .employee-table-container {
-    background: linear-gradient(180deg, var(--surface) 0%, rgba(26, 26, 26, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
     border-radius: 24px;
     padding: 0;
     margin-top: 2rem;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
     animation: fadeInUp 0.6s ease backwards;
     animation-delay: 0.3s;
 }
@@ -23,21 +23,21 @@
 }
 
 .employee-table-container>.table-header {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: var(--surface-elevated);
     padding: 1.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .employee-table-container>.table-header h3 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -63,8 +63,8 @@
 .search-input {
     width: 100%;
     padding: 0.875rem 1rem 0.875rem 2.75rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     color: var(--text-primary);
     font-size: 0.9rem;
@@ -77,9 +77,9 @@
 
 .search-input:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--surface);
     border-color: var(--kellogg-red);
-    box-shadow: 0 0 0 4px rgba(228, 0, 43, 0.15);
+    box-shadow: 0 0 0 4px rgba(228, 0, 43, 0.1);
 }
 
 .table-wrapper {
@@ -91,26 +91,26 @@
     scroll-behavior: smooth;
     /* Better scrollbar styling */
     scrollbar-width: thin;
-    scrollbar-color: rgba(228, 0, 43, 0.5) rgba(255, 255, 255, 0.05);
+    scrollbar-color: rgba(228, 0, 43, 0.3) rgba(0, 0, 0, 0.05);
 }
 
 .table-wrapper::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.03);
     border-radius: 4px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(228, 0, 43, 0.5);
+    background: rgba(228, 0, 43, 0.3);
     border-radius: 4px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: rgba(228, 0, 43, 0.7);
+    background: rgba(228, 0, 43, 0.5);
 }
 
 .employee-table {
@@ -125,20 +125,20 @@
 }
 
 .employee-table th {
-    background: rgba(228, 0, 43, 0.1);
-    padding: 1rem 1.25rem;
+    background: var(--surface-elevated);
+    padding: 14px 18px;
     text-align: left;
-    font-weight: 700;
-    color: var(--kellogg-red);
+    font-weight: 850;
+    color: var(--text-secondary);
     text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    border-bottom: 2px solid rgba(228, 0, 43, 0.2);
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid var(--border-color);
     white-space: nowrap;
 }
 
 .employee-table th:not(:last-child) {
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid var(--border-color);
 }
 
 .employee-table th.sortable {
@@ -149,8 +149,8 @@
 }
 
 .employee-table th.sortable:hover {
-    background: rgba(228, 0, 43, 0.15);
-    color: white;
+    background: rgba(15, 23, 42, 0.04);
+    color: var(--text-primary);
 }
 
 .employee-table th.sortable::after {
@@ -172,7 +172,7 @@
 
 .employee-table td {
     padding: 1rem 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-color);
     color: var(--text-primary);
     font-size: 0.9rem;
     transition: all 0.2s ease;
@@ -183,21 +183,20 @@
 }
 
 .employee-table tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(0, 0, 0, 0.015);
 }
 
 .employee-table tbody tr:hover {
-    background: rgba(228, 0, 43, 0.08);
-    transform: scale(1.002);
+    background: rgba(228, 0, 43, 0.04);
 }
 
 .employee-table tbody tr:hover td {
-    color: white;
+    color: var(--text-primary);
 }
 
 .employee-name {
     font-weight: 600;
-    color: white;
+    color: var(--text-primary);
 }
 
 .employee-id {
@@ -215,31 +214,31 @@
 .highlight {
     color: var(--kellogg-red);
     font-weight: 700;
-    background: rgba(228, 0, 43, 0.1);
+    background: rgba(228, 0, 43, 0.06);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
 
 .highlight-warning {
-    color: #FFB300;
+    color: #B45309;
     font-weight: 700;
-    background: rgba(255, 179, 0, 0.1);
+    background: rgba(217, 119, 6, 0.08);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
 
 .highlight-success {
-    color: #00E676;
-    font-weight: 600;
-    background: rgba(0, 230, 118, 0.1);
+    color: #059669;
+    font-weight: 700;
+    background: rgba(5, 150, 105, 0.08);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
 
 .highlight-danger {
-    color: #FF5252;
+    color: var(--kellogg-red-dark);
     font-weight: 700;
-    background: rgba(255, 82, 82, 0.1);
+    background: rgba(228, 0, 43, 0.06);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
@@ -254,8 +253,8 @@
 /* Table Footer */
 .table-footer {
     padding: 1.25rem 2rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--surface-elevated);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -270,8 +269,8 @@
 
 .pagination button {
     padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--text-secondary);
     font-size: 0.875rem;
@@ -343,7 +342,7 @@
 
 /* Pagination Styles */
 .pagination-info {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -354,9 +353,9 @@
 }
 
 .pagination-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     padding: 0.5rem 0.75rem;
     border-radius: 8px;
     cursor: pointer;
@@ -366,7 +365,7 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background: rgba(228, 0, 43, 0.2);
+    background: rgba(228, 0, 43, 0.05);
     border-color: var(--kellogg-red);
     transform: translateY(-1px);
 }
@@ -377,7 +376,7 @@
 }
 
 .pagination-pages {
-    color: white;
+    color: var(--text-primary);
     font-weight: 600;
     padding: 0 1rem;
     font-size: 0.9rem;

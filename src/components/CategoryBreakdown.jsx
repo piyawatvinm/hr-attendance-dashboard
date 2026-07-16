@@ -38,28 +38,61 @@ export default function CategoryBreakdown({ categoryStats }) {
             <div className="breakdown-chart">
                 <h3>📊 Working Hours & OT by Category</h3>
                 <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={categoryChartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                    <BarChart data={categoryChartData} margin={{ top: 15, right: 15, left: 20, bottom: 10 }}>
+                        <defs>
+                            <linearGradient id="workingHoursGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#64748B" stopOpacity={0.9} />
+                                <stop offset="100%" stopColor="#475569" stopOpacity={0.7} />
+                            </linearGradient>
+                            <linearGradient id="otCategoryGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#E40029" stopOpacity={0.95} />
+                                <stop offset="100%" stopColor="#B8001F" stopOpacity={0.8} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                         <XAxis
                             dataKey="name"
-                            stroke="rgba(255,255,255,0.6)"
+                            stroke="var(--text-tertiary)"
                             angle={-15}
                             textAnchor="end"
-                            height={60}
-                            tick={{ fontSize: 11 }}
+                            height={50}
+                            tick={{ fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 500 }}
+                            tickLine={false}
                         />
-                        <YAxis stroke="rgba(255,255,255,0.6)" tick={{ fontSize: 11 }} />
+                        <YAxis 
+                            stroke="var(--text-tertiary)" 
+                            tick={{ fill: 'var(--text-secondary)', fontSize: 11 }}
+                            tickLine={false}
+                            axisLine={false}
+                            label={{ value: 'Hours (Hrs)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: 'var(--text-secondary)', fontSize: 11, fontWeight: 500 } }}
+                        />
                         <Tooltip
                             contentStyle={{
-                                background: 'rgba(26, 26, 26, 0.95)',
-                                border: '1px solid rgba(228, 0, 43, 0.3)',
-                                borderRadius: '8px',
-                                color: '#fff'
+                                background: 'var(--surface-glass, rgba(255, 255, 255, 0.95))',
+                                backdropFilter: 'blur(12px)',
+                                WebkitBackdropFilter: 'blur(12px)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '16px',
+                                color: 'var(--text-primary)',
+                                boxShadow: 'var(--shadow-lg)',
+                                padding: '12px 16px',
+                                fontSize: '13px',
+                                fontWeight: '500'
                             }}
+                            cursor={{ fill: 'rgba(15, 23, 42, 0.02)' }}
                         />
-                        <Legend />
-                        <Bar dataKey="Working Hrs" stackId="a" fill="#00C853" />
-                        <Bar dataKey="OT" stackId="a" fill="#FF9800" />
+                        <Legend 
+                            wrapperStyle={{ 
+                                fontSize: '11px', 
+                                fontWeight: 600,
+                                color: 'var(--text-secondary)',
+                                paddingTop: '10px'
+                            }}
+                            iconType="circle"
+                            iconSize={7}
+                        />
+                        <Bar dataKey="Working Hrs" stackId="a" fill="url(#workingHoursGrad)" name="Working Hours" maxBarSize={28} />
+                        <Bar dataKey="OT" stackId="a" fill="url(#otCategoryGrad)" name="Overtime" radius={[4, 4, 0, 0]} maxBarSize={28} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
